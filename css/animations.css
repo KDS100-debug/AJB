@@ -1,0 +1,819 @@
+/* ============================================
+   AJB LEARN - ANIMATIONS & EFFECTS
+   Modern EdTech UI Animations
+   ============================================ */
+
+/* ============================================
+   FADE ANIMATIONS
+   ============================================ */
+
+.fade-in {
+  animation: fadeIn 600ms var(--transition-base) forwards;
+}
+
+.fade-in-fast {
+  animation: fadeIn 300ms var(--transition-base) forwards;
+}
+
+.fade-in-slow {
+  animation: fadeIn 1s var(--transition-base) forwards;
+}
+
+.fade-out {
+  animation: fadeOut 300ms var(--transition-base) forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   SLIDE ANIMATIONS
+   ============================================ */
+
+.slide-in-up {
+  animation: slideInUp 500ms var(--transition-base) forwards;
+}
+
+.slide-in-down {
+  animation: slideInDown 500ms var(--transition-base) forwards;
+}
+
+.slide-in-left {
+  animation: slideInLeft 500ms var(--transition-base) forwards;
+}
+
+.slide-in-right {
+  animation: slideInRight 500ms var(--transition-base) forwards;
+}
+
+.slide-out-up {
+  animation: slideOutUp 300ms var(--transition-base) forwards;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   SCALE ANIMATIONS
+   ============================================ */
+
+.scale-in {
+  animation: scaleIn 400ms var(--transition-base) forwards;
+}
+
+.scale-in-slow {
+  animation: scaleInSlow 600ms var(--transition-base) forwards;
+}
+
+.scale-out {
+  animation: scaleOut 300ms var(--transition-base) forwards;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleInSlow {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   ROTATE ANIMATIONS
+   ============================================ */
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.spin-slow {
+  animation: spinSlow 2s linear infinite;
+}
+
+.rotate-in {
+  animation: rotateIn 600ms var(--transition-base) forwards;
+}
+
+@keyframes spinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    transform: rotate(-180deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(0);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   PULSE & BOUNCE ANIMATIONS
+   ============================================ */
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.bounce {
+  animation: bounce 1s infinite;
+}
+
+.bounce-slow {
+  animation: bounceInfinite 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounceInfinite {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* ============================================
+   SHIMMER & SKELETON LOADING
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.5) 60%,
+    rgba(255, 255, 255, 0)
+  );
+  background-size: 200% 100%;
+  animation: shimmerLoading 2s infinite;
+}
+
+@keyframes shimmerLoading {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: calc(200% + 1px) 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--light-dark) 0%,
+    var(--light) 50%,
+    var(--light-dark) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ============================================
+   HOVER EFFECTS
+   ============================================ */
+
+.hover-lift {
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hover-scale {
+  transition: transform var(--transition-base);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+.hover-glow {
+  transition: all var(--transition-base);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(15, 76, 129, 0.3);
+}
+
+.hover-color {
+  transition: color var(--transition-base);
+}
+
+.hover-color:hover {
+  color: var(--primary);
+}
+
+.hover-shadow {
+  transition: box-shadow var(--transition-base);
+}
+
+.hover-shadow:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+/* ============================================
+   BUTTON ANIMATIONS
+   ============================================ */
+
+.btn-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-50%, -50%);
+  transition: width 600ms, height 600ms;
+}
+
+.btn-glow:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.btn-pulse {
+  animation: buttonPulse 2s infinite;
+}
+
+@keyframes buttonPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(15, 76, 129, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(15, 76, 129, 0);
+  }
+}
+
+/* ============================================
+   CARD ANIMATIONS
+   ============================================ */
+
+.card-hover {
+  transition: all var(--transition-base);
+}
+
+.card-hover:hover {
+  transform: translateY(-12px);
+  box-shadow: var(--shadow-2xl);
+}
+
+.card-flip {
+  perspective: 1000px;
+  height: 300px;
+}
+
+.card-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 600ms;
+  transform-style: preserve-3d;
+}
+
+.card-flip:hover .card-flip-inner {
+  transform: rotateY(180deg);
+}
+
+.card-flip-front,
+.card-flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card-flip-back {
+  transform: rotateY(180deg);
+}
+
+/* ============================================
+   TEXT ANIMATIONS
+   ============================================ */
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-reveal {
+  animation: textReveal 800ms var(--transition-base) forwards;
+}
+
+@keyframes textReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.text-wave {
+  animation: wave 600ms ease-in-out;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* ============================================
+   BACKGROUND ANIMATIONS
+   ============================================ */
+
+.bg-gradient-animated {
+  background: linear-gradient(
+    -45deg,
+    var(--primary),
+    var(--secondary),
+    var(--accent),
+    var(--primary)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ============================================
+   MENU ANIMATIONS
+   ============================================ */
+
+.menu-slide-in {
+  animation: menuSlideIn 300ms var(--transition-base) forwards;
+}
+
+.menu-fade-in {
+  animation: menuFadeIn 300ms var(--transition-base) forwards;
+}
+
+@keyframes menuSlideIn {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes menuFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Stagger animation for menu items */
+.menu-item {
+  animation: slideInLeft 400ms var(--transition-base) forwards;
+}
+
+.menu-item:nth-child(1) { animation-delay: 0ms; }
+.menu-item:nth-child(2) { animation-delay: 50ms; }
+.menu-item:nth-child(3) { animation-delay: 100ms; }
+.menu-item:nth-child(4) { animation-delay: 150ms; }
+.menu-item:nth-child(5) { animation-delay: 200ms; }
+
+/* ============================================
+   NOTIFICATION ANIMATIONS
+   ============================================ */
+
+.notification-enter {
+  animation: notificationEnter 400ms var(--transition-base) forwards;
+}
+
+.notification-exit {
+  animation: notificationExit 400ms var(--transition-base) forwards;
+}
+
+@keyframes notificationEnter {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes notificationExit {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   MODAL ANIMATIONS
+   ============================================ */
+
+.modal-enter {
+  animation: modalEnter 300ms var(--transition-base) forwards;
+}
+
+.modal-exit {
+  animation: modalExit 300ms var(--transition-base) forwards;
+}
+
+@keyframes modalEnter {
+  from {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes modalExit {
+  from {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   PROGRESS ANIMATIONS
+   ============================================ */
+
+.progress-bar-fill {
+  animation: progressFill 1s ease-in-out;
+}
+
+@keyframes progressFill {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--width);
+  }
+}
+
+.progress-stripe {
+  animation: progressStripe 1s linear infinite;
+}
+
+@keyframes progressStripe {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 40px 0;
+  }
+}
+
+/* ============================================
+   VISIBILITY ANIMATIONS
+   ============================================ */
+
+.fade-enter-active {
+  animation: fadeIn 300ms var(--transition-base) forwards;
+}
+
+.fade-leave-active {
+  animation: fadeOut 300ms var(--transition-base) forwards;
+}
+
+.scale-enter-active {
+  animation: scaleIn 300ms var(--transition-base) forwards;
+}
+
+.scale-leave-active {
+  animation: scaleOut 300ms var(--transition-base) forwards;
+}
+
+.slide-enter-active {
+  animation: slideInUp 300ms var(--transition-base) forwards;
+}
+
+.slide-leave-active {
+  animation: slideOutUp 300ms var(--transition-base) forwards;
+}
+
+/* ============================================
+   STAGGER ANIMATIONS
+   ============================================ */
+
+.stagger-item {
+  animation: slideInUp 600ms var(--transition-base) forwards;
+  opacity: 0;
+}
+
+.stagger-item:nth-child(1) { animation-delay: 0ms; }
+.stagger-item:nth-child(2) { animation-delay: 100ms; }
+.stagger-item:nth-child(3) { animation-delay: 200ms; }
+.stagger-item:nth-child(4) { animation-delay: 300ms; }
+.stagger-item:nth-child(5) { animation-delay: 400ms; }
+.stagger-item:nth-child(6) { animation-delay: 500ms; }
+
+/* ============================================
+   INTERACTIVE ANIMATIONS
+   ============================================ */
+
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: translate(-50%, -50%) scale(0);
+  animation: rippleEffect 600ms ease-out;
+  pointer-events: none;
+}
+
+@keyframes rippleEffect {
+  to {
+    transform: translate(-50%, -50%) scale(4);
+    opacity: 0;
+  }
+}
+
+/* ============================================
+   FLOAT ANIMATION
+   ============================================ */
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-30px);
+  }
+}
+
+/* ============================================
+   PARALLAX EFFECT
+   ============================================ */
+
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 768px) {
+  .parallax {
+    background-attachment: scroll;
+  }
+}
+
+/* ============================================
+   TRANSITION UTILITIES
+   ============================================ */
+
+.transition-all {
+  transition: all var(--transition-base);
+}
+
+.transition-colors {
+  transition: background-color var(--transition-base), color var(--transition-base), border-color var(--transition-base);
+}
+
+.transition-transform {
+  transition: transform var(--transition-base);
+}
+
+.transition-opacity {
+  transition: opacity var(--transition-base);
+}
+
+.transition-shadow {
+  transition: box-shadow var(--transition-base);
+}
+
+.transition-fast {
+  transition: all var(--transition-fast);
+}
+
+.transition-slow {
+  transition: all var(--transition-slow);
+}
+
+.transition-slower {
+  transition: all var(--transition-slower);
+}
+
+/* ============================================
+   DISABLED STATES
+   ============================================ */
+
+:disabled,
+.disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+}
+
+/* ============================================
+   DARK MODE TRANSITIONS
+   ============================================ */
+
+body,
+[data-theme="dark"] body {
+  transition: background-color var(--transition-base), color var(--transition-base);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .modal,
+[data-theme="dark"] nav {
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+/* ============================================
+   MOBILE ANIMATION SAFETY
+   Prevent animated elements from widening small screens
+   ============================================ */
+
+@media (max-width: 576px) {
+  .slide-in-left,
+  .slide-in-right {
+    animation-name: slideInUp;
+  }
+
+  .hover-lift:hover,
+  .hover-scale:hover,
+  .feature-card:hover,
+  .class-card:hover,
+  .pricing-card:hover,
+  .testimonial-card:hover {
+    transform: translateY(-4px);
+  }
+
+  [data-animate],
+  .stagger-item,
+  .animated {
+    max-width: 100%;
+  }
+}

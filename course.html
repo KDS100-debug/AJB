@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course View - AJB Learn</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <style>
+        .locked-course {
+            display: none;
+            padding: 40px 24px;
+            text-align: center;
+            background: #f8fafc;
+            border: 2px dashed #0F4C81;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .locked-course h2 {
+            color: #0F4C81;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
+                <h1>AJB <span>LEARN</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+                <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="course-container">
+        <aside class="course-sidebar">
+            <div class="back-button">
+                <a href="dashboard.html">Back to Dashboard</a>
+            </div>
+
+            <div class="filter-section">
+                <h3>Subjects</h3>
+                <select id="subjectFilter" class="filter-select">
+                    <option value="">All Subjects</option>
+                    <option value="english">English</option>
+                    <option value="assamese">Assamese</option>
+                    <option value="mathematics">Mathematics</option>
+                    <option value="hindi">Hindi</option>
+                    <option value="science">Science</option>
+                    <option value="social">Social Science</option>
+                    <option value="evs">EVS</option>
+                    <option value="computer">Computer</option>
+                    <option value="gk">GK</option>
+                    <option value="moral">Moral Education</option>
+                </select>
+            </div>
+
+            <div class="chapters-list">
+                <h3>Chapters</h3>
+                <ul id="chaptersList"></ul>
+            </div>
+        </aside>
+
+        <main class="course-content">
+            <section id="lockedCourse" class="locked-course">
+                <h2>Subscribe for &#8377;299 to unlock this course.</h2>
+                <p>AJB Premium unlocks all classes, subjects, videos, notes, and quizzes.</p>
+                <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-primary">Unlock Now</a>
+            </section>
+
+            <section class="video-player-section premium-content">
+                <div class="video-player">
+                    <iframe
+                        id="videoPlayer"
+                        width="100%"
+                        height="500"
+                        title="Course video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                    <div id="videoFallback" class="video-fallback">
+                        <p>This video link could not be embedded. Please check the VIDEOS sheet link.</p>
+                        <a id="videoFallbackLink" href="#" class="btn btn-primary" target="_blank" rel="noopener">Open Video Link</a>
+                    </div>
+                </div>
+
+                <div class="video-info">
+                    <h2 id="videoTitle">Select a video to watch</h2>
+                    <div class="video-meta">
+                        <span id="classInfo"></span> | <span id="subjectInfo"></span> | <span id="chapterInfo"></span>
+                    </div>
+                    <p id="videoDescription"></p>
+
+                    <div class="video-actions">
+                        <button class="btn btn-secondary" id="downloadNotes">Download Notes</button>
+                        <a class="btn btn-secondary" id="openVideoLink" href="#" target="_blank" rel="noopener" style="display: none;">Open Video Link</a>
+                        <button class="btn btn-secondary" id="shareBtn">Share</button>
+                        <button class="btn btn-secondary" id="reportBtn">Report</button>
+                    </div>
+
+                    <div class="progress-section">
+                        <h3>Your Progress</h3>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill"></div>
+                        </div>
+                        <p id="progressText">0%</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="videos-section premium-content">
+                <h3>Videos in This Chapter</h3>
+                <div id="videosGrid" class="videos-grid"></div>
+            </section>
+
+            <section class="notes-section premium-content">
+                <h3>Study Materials</h3>
+                <div id="notesContainer" class="notes-list"></div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 AJB Learn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/youtube.js"></script>
+    <script>
+        let currentVideo = null;
+        let currentClass = localStorage.getItem('selectedClass') || '1';
+        let currentSubject = '';
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!AuthUtils.isAuthenticated()) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const hasAccess = await checkCourseAccess();
+            if (!hasAccess) {
+                showLockedCourse();
+                return;
+            }
+
+            setupCourseActions();
+            await loadSubjects();
+            await loadChapters();
+        });
+
+        async function checkCourseAccess() {
+            try {
+                const response = await verifySubscription(localStorage.getItem('userId'));
+                return response.success &&
+                    (response.isSubscribed || String(response.subscriptionStatus || '').toUpperCase() === 'ACTIVE');
+            } catch (error) {
+                console.error('Subscription check failed:', error);
+                return AuthUtils.isSubscribed();
+            }
+        }
+
+        function showLockedCourse() {
+            document.getElementById('lockedCourse').style.display = 'block';
+            document.querySelectorAll('.premium-content').forEach(section => {
+                section.style.display = 'none';
+            });
+        }
+
+        function setupCourseActions() {
+            document.getElementById('subjectFilter').addEventListener('change', function() {
+                currentSubject = this.value;
+                loadChapters();
+            });
+
+            document.getElementById('downloadNotes').addEventListener('click', function() {
+                if (!currentVideo) {
+                    alert('Select a video first.');
+                }
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                AuthUtils.logout();
+            });
+
+            document.querySelector('.hamburger').addEventListener('click', function() {
+                document.querySelector('.course-sidebar').classList.toggle('mobile-active');
+            });
+        }
+
+        async function loadSubjects() {
+            try {
+                const response = await getSubjects(currentClass);
+                if (!response.success || !response.subjects || response.subjects.length === 0) return;
+
+                const subjectFilter = document.getElementById('subjectFilter');
+                subjectFilter.innerHTML = '<option value="">All Subjects</option>';
+                response.subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.name;
+                    subjectFilter.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading subjects:', error);
+            }
+        }
+
+        async function loadChapters() {
+            try {
+                const response = await getChapters(currentClass, currentSubject);
+                const chaptersList = document.getElementById('chaptersList');
+                chaptersList.innerHTML = '';
+
+                if (!response.success || !response.chapters || response.chapters.length === 0) {
+                    chaptersList.innerHTML = '<li>No chapters found.</li>';
+                    document.getElementById('videosGrid').innerHTML = '';
+                    return;
+                }
+
+                response.chapters.forEach(chapter => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="#" data-chapter-id="${escapeHtml(chapter.id)}">${escapeHtml(chapter.name)}</a>`;
+                    li.querySelector('a').addEventListener('click', function(e) {
+                        e.preventDefault();
+                        loadVideos(chapter.id);
+                    });
+                    chaptersList.appendChild(li);
+                });
+
+                await loadVideos(response.chapters[0].id);
+            } catch (error) {
+                console.error('Error loading chapters:', error);
+            }
+        }
+
+        async function loadVideos(chapterId) {
+            try {
+                const response = await getVideos(chapterId);
+                const videosGrid = document.getElementById('videosGrid');
+                videosGrid.innerHTML = '';
+
+                if (!response.success || !response.videos || response.videos.length === 0) {
+                    videosGrid.innerHTML = '<p>No videos found for this chapter.</p>';
+                    return;
+                }
+
+                response.videos.forEach(video => {
+                    const thumbnailUrl = YoutubeUtils.buildYoutubeThumbnailUrl(video.videoLink || '') || 'assets/images/ajb-logo.png';
+                    const videoCard = document.createElement('div');
+                    videoCard.className = 'video-card';
+                    videoCard.innerHTML = `
+                        <div class="video-thumbnail">
+                            <img src="${escapeHtml(thumbnailUrl)}" alt="${escapeHtml(video.title)}" onerror="this.src='assets/images/ajb-logo.png'">
+                            <div class="play-icon">Play</div>
+                        </div>
+                        <h4>${escapeHtml(video.title)}</h4>
+                        <p>${escapeHtml(video.duration || 'Duration not specified')}</p>
+                    `;
+                    videoCard.addEventListener('click', () => playVideo(video));
+                    videosGrid.appendChild(videoCard);
+                });
+
+                playVideo(response.videos[0]);
+            } catch (error) {
+                console.error('Error loading videos:', error);
+            }
+        }
+
+        async function playVideo(video) {
+            currentVideo = video;
+
+            const videoLink = video.videoLink || '';
+            const videoFrame = document.getElementById('videoPlayer');
+            const videoFallback = document.getElementById('videoFallback');
+            const videoFallbackLink = document.getElementById('videoFallbackLink');
+            const openVideoLink = document.getElementById('openVideoLink');
+            const canEmbed = YoutubeUtils.prepareYoutubeIframe(videoFrame, videoLink);
+            const watchUrl = YoutubeUtils.buildYoutubeWatchUrl(videoLink);
+
+            videoFrame.style.display = canEmbed ? 'block' : 'none';
+            videoFallback.classList.toggle('show', !canEmbed);
+            videoFallbackLink.style.display = watchUrl ? 'inline-flex' : 'none';
+            videoFallbackLink.href = watchUrl || '#';
+
+            openVideoLink.style.display = watchUrl ? 'inline-flex' : 'none';
+            openVideoLink.href = watchUrl || '#';
+
+            document.getElementById('videoTitle').textContent = video.title || 'Untitled video';
+            document.getElementById('classInfo').textContent = video.class ? `Class ${video.class}` : localStorage.getItem('selectedClassName') || '';
+            document.getElementById('subjectInfo').textContent = video.subject || '';
+            document.getElementById('chapterInfo').textContent = video.chapter || '';
+            document.getElementById('videoDescription').textContent = video.description || 'No description available.';
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('progressText').textContent = '100%';
+
+            addToRecentVideos(video);
+
+            try {
+                await saveProgress(localStorage.getItem('userId'), video.id, true);
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+
+            await loadNotes(video.id);
+        }
+
+        async function loadNotes(videoId) {
+            try {
+                const response = await getNotes(videoId);
+                const notesContainer = document.getElementById('notesContainer');
+                notesContainer.innerHTML = '';
+
+                if (!response.success || !response.notes || response.notes.length === 0) {
+                    notesContainer.innerHTML = '<p>No notes uploaded for this video.</p>';
+                    return;
+                }
+
+                response.notes.forEach(note => {
+                    const noteDiv = document.createElement('div');
+                    noteDiv.className = 'note-item';
+                    noteDiv.innerHTML = `
+                        <h4>${escapeHtml(note.title || 'Study Material')}</h4>
+                        <p>${escapeHtml(note.description || '')}</p>
+                        <a href="${escapeHtml(note.pdfLink)}" class="btn btn-secondary btn-small" target="_blank" rel="noopener">Download PDF</a>
+                    `;
+                    notesContainer.appendChild(noteDiv);
+                });
+            } catch (error) {
+                console.error('Error loading notes:', error);
+            }
+        }
+
+        function addToRecentVideos(video) {
+            let recentVideos = JSON.parse(localStorage.getItem('recentVideos')) || [];
+            recentVideos = recentVideos.filter(item => item.id !== video.id);
+            const thumbnailUrl = YoutubeUtils.buildYoutubeThumbnailUrl(video.videoLink || '') || 'assets/images/ajb-logo.png';
+            recentVideos.unshift({
+                id: video.id,
+                title: video.title,
+                subject: video.subject,
+                thumbnail: thumbnailUrl
+            });
+            localStorage.setItem('recentVideos', JSON.stringify(recentVideos.slice(0, 20)));
+        }
+
+        function escapeHtml(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+    </script>
+</body>
+</html>

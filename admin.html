@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - AJB Learn</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
+                <h1>AJB <span>ADMIN</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link" id="adminName">Admin</a></li>
+                <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h3>Admin Menu</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="menu-item active" data-section="dashboard">Dashboard</a></li>
+                <li><a href="#" class="menu-item" data-section="students">Students</a></li>
+                <li><a href="#" class="menu-item" data-section="classes">Classes</a></li>
+                <li><a href="#" class="menu-item" data-section="videos">Videos</a></li>
+                <li><a href="#" class="menu-item" data-section="payments">Payments</a></li>
+            </ul>
+        </aside>
+
+        <main class="admin-content">
+            <section id="dashboard" class="admin-section active">
+                <h2>Dashboard Overview</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">Users</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalStudents">0</div>
+                            <div class="stat-label">Total Students</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">Paid</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="activeStudents">0</div>
+                            <div class="stat-label">Paid Users</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">INR</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalRevenue">&#8377;0</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">Video</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="totalVideos">0</div>
+                            <div class="stat-label">Total Videos</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="students" class="admin-section">
+                <h2>Manage Students</h2>
+                <div class="section-actions">
+                    <input type="text" id="studentSearch" placeholder="Search students..." class="search-input">
+                </div>
+                <div class="table-container">
+                    <table id="studentsTable" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Subscription</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="classes" class="admin-section">
+                <h2>Manage Classes</h2>
+                <div class="table-container">
+                    <table id="classesTable" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Class ID</th>
+                                <th>Class Name</th>
+                                <th>Medium</th>
+                                <th>Subjects</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="videos" class="admin-section">
+                <h2>Manage Videos</h2>
+                <p>Use the Google Sheet VIDEOS tab to add or update video records.</p>
+                <p>For iframe playback, add Public or Unlisted YouTube videos and keep YouTube's Allow embedding setting enabled. Private, age-restricted, or embed-disabled videos can only open through the direct YouTube link.</p>
+            </section>
+
+            <section id="payments" class="admin-section">
+                <h2>Payment Management</h2>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">INR</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="paymentTotalRevenue">&#8377;0</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">Paid</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="paymentPaidUsers">0</div>
+                            <div class="stat-label">Total Paid Users</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-actions">
+                    <input type="date" id="paymentDateFilter" class="filter-select">
+                    <input type="text" id="paymentUserFilter" class="search-input" placeholder="Filter by name, email, mobile, or payment ID">
+                    <select id="paymentStatusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="captured">Captured</option>
+                        <option value="success">Success</option>
+                        <option value="failed">Failed</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                    <button class="btn btn-secondary" id="clearPaymentFilters">Clear</button>
+                </div>
+
+                <div class="table-container">
+                    <table id="paymentsTable" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Payment ID</th>
+                                <th>User Name</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Razorpay Payment ID</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 AJB Learn Admin Panel</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

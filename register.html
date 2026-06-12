@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - AJB Learn</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
+                <h1>AJB <span>LEARN</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="login.html" class="nav-link btn-primary">Login</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Register Section -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Join AJB Learn and start learning today</p>
+
+                <form id="registerForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="tel" id="mobile" name="mobile" required placeholder="Enter your 10-digit mobile number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="Enter your email">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter password (min 6 characters)">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Re-enter password">
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of Service</a> and Privacy Policy</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large btn-full">Register</button>
+
+                    <div id="registerMessage" class="auth-message"></div>
+
+                    <p class="auth-footer">Already have an account? <a href="login.html">Login here</a></p>
+                </form>
+            </div>
+
+            <div class="auth-benefits">
+                <h3>Why Join AJB Learn?</h3>
+                <ul>
+                    <li>✓ Free access to demo classes</li>
+                    <li>✓ Affordable subscription</li>
+                    <li>✓ HD quality videos</li>
+                    <li>✓ Complete study materials</li>
+                    <li>✓ Online tests and quizzes</li>
+                    <li>✓ Progress tracking</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 AJB Learn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                mobile: document.getElementById('mobile').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value
+            };
+
+            // Validation
+            if (formData.password !== formData.confirmPassword) {
+                showMessage('Passwords do not match!', 'error');
+                return;
+            }
+
+            if (formData.password.length < 6) {
+                showMessage('Password must be at least 6 characters long!', 'error');
+                return;
+            }
+
+            if (formData.mobile.length !== 10 || isNaN(formData.mobile)) {
+                showMessage('Please enter a valid 10-digit mobile number!', 'error');
+                return;
+            }
+
+            try {
+                showMessage('Registering...', 'info');
+                
+                const response = await registerUser(formData);
+                
+                if (response.success) {
+                    showMessage(response.message, 'success');
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 2000);
+                } else {
+                    showMessage(response.message, 'error');
+                }
+            } catch (error) {
+                showMessage('An error occurred. Please try again.', 'error');
+                console.error('Registration error:', error);
+            }
+        });
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('registerMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = 'auth-message ' + type;
+        }
+
+        // Mobile menu toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

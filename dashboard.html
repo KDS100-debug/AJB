@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - AJB Learn</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
+                <h1>AJB <span>LEARN</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link" id="userGreeting">Welcome</a></li>
+                <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h3>Menu</h3>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="menu-item active" data-section="overview">Overview</a></li>
+                <li><a href="#" class="menu-item" data-section="courses">Courses</a></li>
+                <li><a href="#" class="menu-item" data-section="progress">My Progress</a></li>
+                <li><a href="#" class="menu-item" data-section="downloads">Downloads</a></li>
+                <li><a href="#" class="menu-item" data-section="settings">Settings</a></li>
+            </ul>
+        </aside>
+
+        <main class="dashboard-content">
+            <section id="overview" class="dashboard-section active">
+                <h2>Dashboard Overview</h2>
+
+                <div class="welcome-card">
+                    <h3>Welcome back, <span id="studentName"></span>!</h3>
+                    <p id="subscriptionStatus">Checking subscription...</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">Video</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="videosWatched">0</div>
+                            <div class="stat-label">Videos Watched</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">Quiz</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="quizzesCompleted">0</div>
+                            <div class="stat-label">Quizzes Completed</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">Score</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="averageScore">0%</div>
+                            <div class="stat-label">Average Score</div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">Time</div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="studyHours">0</div>
+                            <div class="stat-label">Study Hours</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recent-section">
+                    <h3>Recently Watched</h3>
+                    <div id="recentVideos" class="videos-grid"></div>
+                </div>
+            </section>
+
+            <section id="courses" class="dashboard-section">
+                <h2>My Courses</h2>
+
+                <div class="medium-selector">
+                    <button class="medium-btn active" data-medium="english">English Medium</button>
+                    <button class="medium-btn" data-medium="assamese">Assamese Medium</button>
+                </div>
+
+                <div id="classesContainer" class="classes-grid"></div>
+            </section>
+
+            <section id="progress" class="dashboard-section">
+                <h2>My Progress</h2>
+                <div id="progressContainer" class="progress-list">
+                    <p>Progress data will appear as you watch lessons and complete quizzes.</p>
+                </div>
+            </section>
+
+            <section id="downloads" class="dashboard-section">
+                <h2>My Downloads</h2>
+                <div id="downloadsList" class="downloads-list">
+                    <p>Downloadable notes will appear inside each course.</p>
+                </div>
+            </section>
+
+            <section id="settings" class="dashboard-section">
+                <h2>Settings</h2>
+
+                <div class="settings-form">
+                    <div class="settings-group">
+                        <h3>Account Information</h3>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="settingsEmail" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" id="settingsMobile" readonly>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Change Password</h3>
+                        <div class="form-group">
+                            <label>Current Password</label>
+                            <input type="password" id="currentPassword" placeholder="Enter current password">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" id="newPassword" placeholder="Enter new password">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
+                        </div>
+                        <button class="btn btn-primary" id="changePasswordBtn">Change Password</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 AJB Learn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

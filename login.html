@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AJB Learn</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
+                <h1>AJB <span>LEARN</span></h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="register.html" class="nav-link btn-secondary">Register</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="auth-section">
+        <div class="auth-container">
+            <div class="auth-card">
+                <h2>Welcome Back</h2>
+                <p class="auth-subtitle">Login to your AJB Learn account</p>
+
+                <form id="loginForm" class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Email Address / ID</label>
+                        <input type="text" id="email" name="email" required placeholder="Enter your email or ID">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    </div>
+
+                    <div class="form-group checkbox">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large btn-full">Login</button>
+
+                    <div id="loginMessage" class="auth-message"></div>
+
+                    <p class="auth-footer">Don't have an account? <a href="register.html">Register here</a></p>
+                    <p class="auth-footer"><a href="#">Forgot password?</a></p>
+                </form>
+            </div>
+
+            <div class="auth-benefits">
+                <h3>Login to Access</h3>
+                <ul>
+                    <li>✓ All video classes</li>
+                    <li>✓ Study materials</li>
+                    <li>✓ Online tests</li>
+                    <li>✓ Your progress</li>
+                    <li>✓ Personalized dashboard</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 AJB Learn. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+
+            try {
+                showMessage('Logging in...', 'info');
+                
+                const response = await loginUser(email, password);
+                
+                if (response.success) {
+                    // Save user session
+                    const user = response.user;
+                    localStorage.setItem('userId', user.id);
+                    localStorage.setItem('userEmail', user.email);
+                    localStorage.setItem('userName', user.name);
+                    localStorage.setItem('userMobile', user.mobile || '');
+                    localStorage.setItem('sessionToken', response.sessionToken);
+                    localStorage.setItem('subscriptionStatus', user.subscriptionStatus || (user.isSubscribed ? 'ACTIVE' : 'INACTIVE'));
+                    localStorage.setItem('isSubscribed', user.isSubscribed ? 'true' : 'false');
+                    
+                    if (rememberMe) {
+                        localStorage.setItem('rememberMe', 'true');
+                    }
+
+                    // Check if user is admin
+                    if (user.isAdmin) {
+                        localStorage.setItem('isAdmin', 'true');
+                        localStorage.setItem('adminToken', response.sessionToken);
+                        localStorage.setItem('adminEmail', user.email);
+                        showMessage('Admin login successful!', 'success');
+                        setTimeout(() => {
+                            window.location.href = 'admin.html';
+                        }, 1500);
+                    } else {
+                        // Check subscription status
+                        if (user.isSubscribed) {
+                            showMessage('Login successful!', 'success');
+                            setTimeout(() => {
+                                window.location.href = 'dashboard.html';
+                            }, 1500);
+                        } else {
+                            showMessage('Login successful!', 'success');
+                            setTimeout(() => {
+                                window.location.href = 'subscription.html';
+                            }, 1500);
+                        }
+                    }
+                } else {
+                    showMessage(response.message, 'error');
+                }
+            } catch (error) {
+                showMessage('An error occurred. Please try again.', 'error');
+                console.error('Login error:', error);
+            }
+        });
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('loginMessage');
+            messageDiv.textContent = message;
+            messageDiv.className = 'auth-message ' + type;
+        }
+
+        // Mobile menu toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.nav-menu').classList.toggle('active');
+        });
+
+        // Check if user is already logged in
+        if (localStorage.getItem('userId')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
