@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AJB LEARN chapter-wise practice questions with answer keys.">
+  <title>Practice | AJB LEARN</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/ajb-premium.css">
+</head>
+<body class="ajb-app">
+  <header class="site-header">
+    <nav class="site-nav ajb-container">
+      <a class="brand" href="index.html"><img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo"><span class="brand-copy"><strong>AJB LEARN</strong><small>Practice Room</small></span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li><li><a href="ebook.html">E-Book</a></li><li><a href="practice.html">Practice</a></li><li><a href="quiz.html">MCQ</a></li><li><a href="course.html">Learn</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" data-theme-toggle title="Toggle dark mode"><i data-lucide="moon" size="17"></i></button>
+        <a class="btn btn-primary desktop-label" href="login.html">Login</a>
+        <button class="menu-toggle" data-menu-toggle aria-label="Open menu"><i data-lucide="menu" size="19"></i></button>
+      </div>
+    </nav>
+  </header>
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-row ajb-container">
+        <div><span class="eyebrow">Chapter practice</span><h1>Turn learning into mastery.</h1><p>Work through fill-in-the-blanks, matching, short-answer and long-answer questions with guided answer keys.</p></div>
+        <a class="btn btn-primary btn-lg" href="quiz.html"><i data-lucide="timer" size="17"></i> Take an MCQ Quiz</a>
+      </div>
+    </section>
+    <div class="ajb-container">
+      <form class="filter-bar" id="practiceFilters">
+        <div class="field"><label>Medium</label><select data-filter="medium"><option value="">Select medium</option></select></div>
+        <div class="field"><label>Class</label><select data-filter="class"><option value="">Select class</option></select></div>
+        <div class="field"><label>Subject</label><select data-filter="subject"><option value="">Select subject</option></select></div>
+        <div class="field"><label>Chapter</label><select data-filter="chapter"><option value="">Select chapter</option></select></div>
+        <button class="btn btn-primary" type="submit"><i data-lucide="refresh-cw" size="15"></i> Load</button>
+      </form>
+      <section class="practice-stack" id="practiceStack"></section>
+    </div>
+  </main>
+  <footer class="site-footer"><div class="ajb-container"><div class="footer-bottom" style="margin-top:0"><span>© 2026 AJB LEARN</span><span>Practice a little. Improve every day.</span></div></div></footer>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/resources.js"></script>
+</body>
+</html>

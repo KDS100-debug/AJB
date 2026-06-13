@@ -1,163 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Dashboard - AJB Learn</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dashboard.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AJB LEARN student dashboard and progress overview.">
+  <title>Student Dashboard | AJB LEARN</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/ajb-premium.css">
 </head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
-                <h1>AJB <span>LEARN</span></h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#" class="nav-link" id="userGreeting">Welcome</a></li>
-                <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+<body class="ajb-app">
+  <header class="site-header">
+    <nav class="site-nav ajb-container">
+      <a class="brand" href="index.html"><img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo"><span class="brand-copy"><strong>AJB LEARN</strong><small>Student Dashboard</small></span></a>
+      <ul class="nav-links"><li><a href="course.html">Learning Room</a></li><li><a href="ebook.html">E-Books</a></li><li><a href="practice.html">Practice</a></li><li><a href="quiz.html">MCQ</a></li></ul>
+      <div class="nav-actions">
+        <button class="icon-btn" data-sidebar-toggle title="Open dashboard menu"><i data-lucide="panel-left" size="17"></i></button>
+        <button class="icon-btn" data-theme-toggle title="Toggle dark mode"><i data-lucide="moon" size="17"></i></button>
+        <a class="btn btn-primary desktop-label" href="course.html">Continue Learning</a>
+        <button class="menu-toggle" data-menu-toggle aria-label="Open menu"><i data-lucide="menu" size="19"></i></button>
+      </div>
     </nav>
+  </header>
 
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h3>Menu</h3>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a href="#" class="menu-item active" data-section="overview">Overview</a></li>
-                <li><a href="#" class="menu-item" data-section="courses">Courses</a></li>
-                <li><a href="#" class="menu-item" data-section="progress">My Progress</a></li>
-                <li><a href="#" class="menu-item" data-section="downloads">Downloads</a></li>
-                <li><a href="#" class="menu-item" data-section="settings">Settings</a></li>
-            </ul>
-        </aside>
+  <main class="app-layout">
+    <aside class="app-sidebar">
+      <div class="profile-mini">
+        <span class="profile-avatar" id="studentInitials">AS</span>
+        <span><strong id="studentName">AJB Student</strong><span id="studentClass">English Medium • Class 6</span></span>
+      </div>
+      <nav class="app-menu">
+        <a class="active" href="#" data-panel-target="overview"><i data-lucide="layout-dashboard" size="16"></i> Overview</a>
+        <a href="#" data-panel-target="courses"><i data-lucide="library" size="16"></i> My Courses</a>
+        <a href="#" data-panel-target="progress"><i data-lucide="chart-no-axes-combined" size="16"></i> Progress</a>
+        <a href="#" data-panel-target="achievements"><i data-lucide="trophy" size="16"></i> Achievements</a>
+        <a href="#" data-panel-target="profile"><i data-lucide="user-round" size="16"></i> Student Profile</a>
+        <a href="login.html" id="logoutBtn"><i data-lucide="log-out" size="16"></i> Logout</a>
+      </nav>
+    </aside>
 
-        <main class="dashboard-content">
-            <section id="overview" class="dashboard-section active">
-                <h2>Dashboard Overview</h2>
-
-                <div class="welcome-card">
-                    <h3>Welcome back, <span id="studentName"></span>!</h3>
-                    <p id="subscriptionStatus">Checking subscription...</p>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">Video</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="videosWatched">0</div>
-                            <div class="stat-label">Videos Watched</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Quiz</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="quizzesCompleted">0</div>
-                            <div class="stat-label">Quizzes Completed</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Score</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="averageScore">0%</div>
-                            <div class="stat-label">Average Score</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Time</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="studyHours">0</div>
-                            <div class="stat-label">Study Hours</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="recent-section">
-                    <h3>Recently Watched</h3>
-                    <div id="recentVideos" class="videos-grid"></div>
-                </div>
-            </section>
-
-            <section id="courses" class="dashboard-section">
-                <h2>My Courses</h2>
-
-                <div class="medium-selector">
-                    <button class="medium-btn active" data-medium="english">English Medium</button>
-                    <button class="medium-btn" data-medium="assamese">Assamese Medium</button>
-                </div>
-
-                <div id="classesContainer" class="classes-grid"></div>
-            </section>
-
-            <section id="progress" class="dashboard-section">
-                <h2>My Progress</h2>
-                <div id="progressContainer" class="progress-list">
-                    <p>Progress data will appear as you watch lessons and complete quizzes.</p>
-                </div>
-            </section>
-
-            <section id="downloads" class="dashboard-section">
-                <h2>My Downloads</h2>
-                <div id="downloadsList" class="downloads-list">
-                    <p>Downloadable notes will appear inside each course.</p>
-                </div>
-            </section>
-
-            <section id="settings" class="dashboard-section">
-                <h2>Settings</h2>
-
-                <div class="settings-form">
-                    <div class="settings-group">
-                        <h3>Account Information</h3>
-                        <div class="form-group">
-                            <label>Email Address</label>
-                            <input type="email" id="settingsEmail" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label>Mobile Number</label>
-                            <input type="tel" id="settingsMobile" readonly>
-                        </div>
-                    </div>
-
-                    <div class="settings-group">
-                        <h3>Change Password</h3>
-                        <div class="form-group">
-                            <label>Current Password</label>
-                            <input type="password" id="currentPassword" placeholder="Enter current password">
-                        </div>
-                        <div class="form-group">
-                            <label>New Password</label>
-                            <input type="password" id="newPassword" placeholder="Enter new password">
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password</label>
-                            <input type="password" id="confirmNewPassword" placeholder="Confirm new password">
-                        </div>
-                        <button class="btn btn-primary" id="changePasswordBtn">Change Password</button>
-                    </div>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024 AJB Learn. All rights reserved.</p>
-            </div>
+    <div class="app-content">
+      <section class="dashboard-section active" id="overview">
+        <div class="app-topline">
+          <div><span class="eyebrow">Friday, 12 June</span><h1>Welcome back, <span id="welcomeName">Student</span>.</h1><p>Here is what is happening with your learning today.</p></div>
+          <button class="btn btn-secondary" type="button" data-install-app><i data-lucide="smartphone" size="15"></i> Install App</button>
         </div>
-    </footer>
+        <div class="metric-grid">
+          <article class="metric-card"><span>Videos watched</span><div class="metric-row"><strong id="videosWatched">18</strong><span class="metric-icon"><i data-lucide="play" size="16"></i></span></div></article>
+          <article class="metric-card"><span>Quizzes completed</span><div class="metric-row"><strong id="quizzesCompleted">7</strong><span class="metric-icon"><i data-lucide="list-checks" size="16"></i></span></div></article>
+          <article class="metric-card"><span>Average score</span><div class="metric-row"><strong id="averageScore">84%</strong><span class="metric-icon"><i data-lucide="target" size="16"></i></span></div></article>
+          <article class="metric-card"><span>Study hours</span><div class="metric-row"><strong id="studyHours">12.5</strong><span class="metric-icon"><i data-lucide="clock-3" size="16"></i></span></div></article>
+        </div>
+        <div class="dashboard-grid">
+          <div style="display:grid;gap:18px">
+            <article class="panel">
+              <div class="panel-head"><h2>Continue Learning</h2><a href="course.html" style="font-size:10px;color:var(--ajb-red);font-weight:800">View course</a></div>
+              <div class="continue-card" id="continueLearningCard">
+                <div class="continue-cover"><i data-lucide="play-circle" size="35"></i></div>
+                <div class="continue-copy"><span class="eyebrow" style="margin-bottom:0">Mathematics • Chapter 1</span><h3>Knowing Our Numbers</h3><p>Continue from 08:42 • English Medium • Class 6</p><div class="progress-bar" style="margin-bottom:14px"><span style="width:62%"></span></div><a class="btn btn-primary btn-sm" href="course.html">Resume Lesson <i data-lucide="arrow-right" size="13"></i></a></div>
+              </div>
+            </article>
+            <article class="panel">
+              <div class="panel-head"><h2>Recent Activity</h2><span style="font-size:9px;color:var(--ajb-muted)">Last 7 days</span></div>
+              <div class="activity-list" id="recentActivityList"><p style="color:var(--ajb-muted);font-size:10px">Loading activity...</p></div>
+            </article>
+          </div>
+          <div style="display:grid;gap:18px;align-content:start">
+            <article class="panel">
+              <div class="panel-head"><h2>Weekly Goal</h2><span style="font-size:10px;color:var(--ajb-red);font-weight:800">4 / 5 days</span></div>
+              <div class="progress-ring-row"><span class="progress-ring" data-label="80%" style="--progress:80%"></span><span><strong>One more day!</strong><span>Study today to complete your weekly goal.</span></span></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head"><h2>Achievements</h2><a href="#" data-panel-target="achievements" style="font-size:9px;color:var(--ajb-red);font-weight:800">View all</a></div>
+              <div class="achievement-grid" id="achievementSummary"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-head"><h2>Recommended</h2></div>
+              <div id="recommendedList"><p style="color:var(--ajb-muted);font-size:10px">Loading announcements...</p></div>
+            </article>
+          </div>
+        </div>
+      </section>
 
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/dashboard.js"></script>
+      <section class="dashboard-section" id="courses">
+        <div class="app-topline"><div><span class="eyebrow">Your library</span><h1>My Courses</h1><p>Open any subject and continue from your saved position.</p></div></div>
+        <div class="resource-grid" id="dashboardCourses"></div>
+      </section>
+
+      <section class="dashboard-section" id="progress">
+        <div class="app-topline"><div><span class="eyebrow">Learning analytics</span><h1>My Progress</h1><p>Subject-level completion based on completed chapters.</p></div></div>
+        <div class="panel"><div class="activity-list" id="subjectProgressList"></div></div>
+      </section>
+
+      <section class="dashboard-section" id="achievements">
+        <div class="app-topline"><div><span class="eyebrow">Milestones</span><h1>Achievements and Certificates</h1><p>Keep learning to unlock more badges and course certificates.</p></div></div>
+        <div class="feature-grid">
+          <article class="feature-card"><span class="card-icon"><i data-lucide="flame"></i></span><h3>5 Day Learning Streak</h3><p>Studied on five consecutive days.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="star"></i></span><h3>Quiz Star</h3><p>Scored 80% or more in five quizzes.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="award"></i></span><h3>First Certificate</h3><p>Complete a full subject to unlock.</p></article>
+        </div>
+      </section>
+
+      <section class="dashboard-section" id="profile">
+        <div class="app-topline"><div><span class="eyebrow">Account settings</span><h1>Student Profile</h1><p>Update your personal and learning information.</p></div></div>
+        <article class="panel" style="max-width:760px">
+          <form class="form-grid" id="profileForm">
+            <div class="field"><label>Name</label><input id="profileName" value="AJB Student"></div>
+            <div class="field"><label>Mobile</label><input id="profileMobile" type="tel" placeholder="Enter mobile number"></div>
+            <div class="field"><label>Email</label><input id="profileEmail" type="email" value="student@example.com"></div>
+            <div class="field"><label>Profile image</label><input id="profileImage" type="file" accept="image/*"></div>
+            <div class="field"><label>Medium</label><select id="profileMedium"></select></div>
+            <div class="field"><label>Class</label><select id="profileClass"></select></div>
+            <div class="field"><label>Current password</label><input id="profileCurrentPassword" type="password" placeholder="Required only to change password"></div>
+            <div class="field"><label>New password</label><input id="profileNewPassword" type="password" placeholder="Leave blank to keep current password"></div>
+            <div class="wide"><button class="btn btn-primary" type="submit">Save Profile</button></div>
+          </form>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/student-dashboard.js"></script>
 </body>
 </html>

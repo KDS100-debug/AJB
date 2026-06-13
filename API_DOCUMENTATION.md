@@ -129,7 +129,7 @@ Replace `{DEPLOYMENT_ID}` with your actual Google Apps Script deployment ID.
 ```json
 {
   "action": "changePassword",
-  "userId": "USER1701234567",
+  "sessionToken": "SESSION_TOKEN_FROM_LOGIN",
   "currentPassword": "oldPassword",
   "newPassword": "newPassword123"
 }
@@ -142,6 +142,34 @@ Replace `{DEPLOYMENT_ID}` with your actual Google Apps Script deployment ID.
   "message": "Password changed successfully"
 }
 ```
+
+### Password Reset OTP
+
+**Request OTP**
+
+```json
+{
+  "action": "requestPasswordReset",
+  "identifier": "student@example.com",
+  "channel": "email"
+}
+```
+
+Use `channel: "phone"` with the registered 10-digit phone number for SMS.
+The response returns an opaque `requestId`; it never returns the OTP.
+
+**Reset Password**
+
+```json
+{
+  "action": "resetPasswordWithOtp",
+  "requestId": "RESET_...",
+  "otp": "123456",
+  "newPassword": "NewPassword123"
+}
+```
+
+OTPs expire after 10 minutes and allow at most five attempts.
 
 ---
 

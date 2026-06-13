@@ -1,1338 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="AJB Learn - Premium Online Tuition Platform for Classes Nursery to 10. Learn with HD videos, study materials, quizzes, and lifetime access.">
-    <meta name="theme-color" content="#E50914">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>AJB Learn - Premium Online Tuition | Nursery to Class 10</title>
-    
-    <!-- CSS Bundle -->
-    <link rel="stylesheet" href="css/variables.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/animations.css">
-    <link rel="stylesheet" href="css/style.css">
-    
-    <style>
-        /* Homepage Specific Styles */
-        
-        .hero {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            padding: 6rem 0;
-            min-height: 600px;
-        }
-        
-        .hero-content h1 {
-            font-size: clamp(2rem, 5vw, 4.5rem);
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .hero-subtitle {
-            font-size: clamp(1rem, 2.5vw, 1.25rem);
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-            line-height: 1.8;
-        }
-        
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .hero-video {
-            width: 100%;
-            max-width: 560px;
-            aspect-ratio: 16 / 9;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--shadow-xl);
-            background: var(--dark);
-        }
-
-        .hero-video iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            display: block;
-        }
-
-        .hero-image > svg {
-            display: none;
-        }
-
-        .entry-actions {
-            background: var(--white);
-            border-bottom: 1px solid var(--light-dark);
-            box-shadow: var(--shadow-sm);
-        }
-
-        [data-theme="dark"] .entry-actions {
-            background: var(--dark-light);
-        }
-
-        .entry-actions-inner {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 1.5rem;
-            align-items: center;
-            padding: 1.25rem 0;
-        }
-
-        .entry-actions-title {
-            margin: 0 0 0.25rem;
-            font-size: 1.35rem;
-            color: var(--primary);
-        }
-
-        .entry-actions-text {
-            margin: 0;
-            color: var(--text-secondary);
-        }
-
-        .entry-actions-buttons {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .pay-now-btn {
-            background: var(--secondary);
-            color: var(--dark);
-            border: 2px solid var(--secondary);
-        }
-
-        .pay-now-btn:hover {
-            background: var(--secondary-light);
-            border-color: var(--secondary-light);
-            color: var(--dark);
-        }
-
-        .startup-popup-overlay {
-            position: fixed;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background: rgba(16, 42, 67, 0.72);
-            z-index: 9999;
-        }
-
-        .startup-popup-overlay.show {
-            display: flex;
-        }
-
-        .startup-popup {
-            width: min(720px, calc(100% - 24px));
-            background: var(--white);
-            border-radius: 8px;
-            box-shadow: var(--shadow-2xl);
-            overflow: hidden;
-        }
-
-        [data-theme="dark"] .startup-popup {
-            background: var(--dark-light);
-        }
-
-        .startup-popup-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--light-dark);
-        }
-
-        .startup-popup-header h2 {
-            margin: 0;
-            color: var(--primary);
-            font-size: 1.35rem;
-        }
-
-        .startup-popup-close {
-            width: 40px;
-            height: 40px;
-            border: 0;
-            border-radius: 50%;
-            background: var(--light-dark);
-            color: var(--text);
-            cursor: pointer;
-            font-size: 1.5rem;
-            line-height: 1;
-        }
-
-        .startup-popup-video {
-            aspect-ratio: 16 / 9;
-            background: var(--dark);
-        }
-
-        .startup-popup-video iframe {
-            width: 100%;
-            height: 100%;
-            border: 0;
-            display: block;
-        }
-
-        .startup-popup-actions {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-            padding: 1.25rem;
-        }
-
-        .startup-popup-actions .btn {
-            flex: 1 1 180px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-        
-        .feature-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            padding: 2rem;
-            border-radius: 1.5rem;
-            text-align: center;
-            transition: all var(--transition-base);
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-        
-        .feature-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .classes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 4rem;
-        }
-        
-        .class-card {
-            background: var(--white);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-sm);
-            border: 2px solid transparent;
-        }
-        
-        [data-theme="dark"] .class-card {
-            background: var(--dark-light);
-        }
-        
-        .class-card:hover {
-            border-color: var(--primary);
-            transform: scale(1.05);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .class-card.active-outline {
-            border-color: var(--primary);
-            box-shadow: 0 18px 38px rgba(229, 9, 20, 0.24);
-        }
-        
-        .class-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .class-name {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .public-outline {
-            margin-top: 2rem;
-            padding: 2rem;
-            border-radius: 8px;
-            background:
-                linear-gradient(145deg, rgba(33, 36, 43, 0.96), rgba(11, 12, 15, 0.98)),
-                radial-gradient(circle at 20% 0%, rgba(229, 9, 20, 0.2), transparent 34%);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .public-outline-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .public-outline-title {
-            margin: 0;
-            color: var(--primary);
-            font-size: 1.6rem;
-        }
-
-        .public-outline-subtitle {
-            margin: 0.25rem 0 0;
-            color: var(--text-secondary);
-        }
-
-        .outline-subjects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 1rem;
-        }
-
-        .outline-subject {
-            padding: 1rem;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .outline-subject h4 {
-            margin: 0 0 0.75rem;
-            color: var(--secondary-light);
-        }
-
-        .outline-chapters {
-            margin: 0;
-            padding-left: 1.25rem;
-            color: var(--text-secondary);
-        }
-
-        .outline-chapters li {
-            margin-bottom: 0.45rem;
-        }
-        
-        .pricing-section {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 4rem 0;
-            border-radius: 2rem;
-            text-align: center;
-            margin: 4rem 0;
-        }
-        
-        .pricing-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 1.5rem;
-            padding: 2rem;
-            max-width: 400px;
-            margin: 2rem auto;
-            transition: all var(--transition-base);
-        }
-        
-        .pricing-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.15);
-        }
-        
-        .price {
-            font-size: 3rem;
-            font-weight: 700;
-            margin: 1rem 0;
-        }
-        
-        .price-period {
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        
-        .benefits-list {
-            list-style: none;
-            padding: 2rem 0;
-            text-align: left;
-        }
-        
-        .benefits-list li {
-            padding: 0.75rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        
-        .benefits-list li::before {
-            content: '✓';
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: var(--secondary);
-        }
-        
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 4rem;
-        }
-        
-        .subject-badge {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 3rem;
-            text-align: center;
-            font-weight: 600;
-            transition: all var(--transition-base);
-            cursor: pointer;
-        }
-        
-        .subject-badge:hover {
-            transform: scale(1.05);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-        
-        .testimonial-card {
-            background: var(--white);
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: var(--shadow-md);
-            border-left: 4px solid var(--secondary);
-        }
-        
-        [data-theme="dark"] .testimonial-card {
-            background: var(--dark-light);
-        }
-        
-        .testimonial-text {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-size: 0.95rem;
-            line-height: 1.8;
-        }
-        
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-        
-        .author-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 1.25rem;
-        }
-        
-        .author-info h4 {
-            margin: 0;
-            font-size: 0.95rem;
-        }
-        
-        .author-role {
-            font-size: 0.85rem;
-            color: var(--muted);
-            margin: 0;
-        }
-        
-        .star-rating {
-            color: var(--secondary);
-            margin-bottom: 0.5rem;
-            font-size: 1rem;
-        }
-        
-        .faq-section {
-            max-width: 800px;
-            margin: 4rem auto;
-        }
-        
-        .faq-item {
-            margin-bottom: 1.5rem;
-        }
-        
-        .faq-question {
-            background: var(--light-dark);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            cursor: pointer;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all var(--transition-base);
-        }
-        
-        [data-theme="dark"] .faq-question {
-            background: var(--dark);
-        }
-        
-        .faq-question:hover {
-            background: var(--primary);
-            color: white;
-        }
-        
-        .faq-toggle {
-            font-size: 1.5rem;
-            transition: transform var(--transition-base);
-        }
-        
-        .faq-answer {
-            display: none;
-            padding: 1.5rem;
-            background: var(--light);
-            border-radius: 0 0 1rem 1rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            border-top: 1px solid var(--light-dark);
-        }
-        
-        [data-theme="dark"] .faq-answer {
-            background: var(--dark-light);
-        }
-        
-        .faq-answer.show {
-            display: block;
-        }
-        
-        .faq-toggle.show {
-            transform: rotate(180deg);
-        }
-        
-        .cta-section {
-            background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
-            padding: 3rem;
-            border-radius: 1.5rem;
-            text-align: center;
-            color: var(--dark);
-            margin: 4rem 0;
-        }
-        
-        .cta-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-        
-        .cta-subtitle {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        /* Advanced homepage red + metal black polish */
-        .hero {
-            position: relative;
-            overflow: hidden;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            background:
-                linear-gradient(115deg, transparent 0 32%, rgba(255, 255, 255, 0.08) 43%, transparent 54%),
-                radial-gradient(circle at 12% 18%, rgba(229, 9, 20, 0.28), transparent 34%);
-            opacity: 0.82;
-        }
-
-        .hero-content,
-        .hero-image {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content h1 {
-            background: linear-gradient(135deg, #FFFFFF 0%, #FF3341 48%, #C9D1D9 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 24px 70px rgba(229, 9, 20, 0.26);
-        }
-
-        .hero-video {
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-                #050608;
-            box-shadow:
-                0 0 0 1px rgba(229, 9, 20, 0.25),
-                0 30px 80px rgba(0, 0, 0, 0.58),
-                0 24px 60px rgba(229, 9, 20, 0.18);
-        }
-
-        .hero-video::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-            border-radius: inherit;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), inset 0 -70px 100px rgba(0, 0, 0, 0.18);
-        }
-
-        .entry-actions {
-            background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
-                linear-gradient(90deg, rgba(229, 9, 20, 0.18), rgba(5, 6, 8, 0.96));
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .feature-card,
-        .class-card,
-        .testimonial-card,
-        .pricing-card {
-            border-radius: 8px;
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
-                linear-gradient(160deg, rgba(27, 30, 38, 0.96), rgba(5, 6, 8, 0.98));
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            box-shadow:
-                0 22px 60px rgba(0, 0, 0, 0.46),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        }
-
-        .feature-card:hover,
-        .class-card:hover,
-        .testimonial-card:hover,
-        .pricing-card:hover {
-            transform: translateY(-8px);
-            border-color: rgba(229, 9, 20, 0.78);
-            box-shadow:
-                0 30px 80px rgba(0, 0, 0, 0.56),
-                0 20px 46px rgba(229, 9, 20, 0.22);
-        }
-
-        .class-card.active-outline {
-            background:
-                linear-gradient(145deg, rgba(229, 9, 20, 0.24), rgba(255, 255, 255, 0.04)),
-                linear-gradient(160deg, rgba(27, 30, 38, 0.98), rgba(5, 6, 8, 0.98));
-            border-color: rgba(229, 9, 20, 0.95);
-            box-shadow:
-                0 0 0 1px rgba(229, 9, 20, 0.3),
-                0 26px 70px rgba(229, 9, 20, 0.22);
-        }
-
-        .class-number {
-            text-shadow: 0 0 26px rgba(229, 9, 20, 0.5);
-        }
-
-        .public-outline {
-            position: relative;
-            overflow: hidden;
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.02)),
-                radial-gradient(circle at 14% 0%, rgba(229, 9, 20, 0.26), transparent 34%),
-                linear-gradient(160deg, rgba(27, 30, 38, 0.98), rgba(5, 6, 8, 0.98));
-            border-color: rgba(255, 255, 255, 0.16);
-        }
-
-        .outline-subject {
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
-                rgba(5, 6, 8, 0.54);
-            border-color: rgba(255, 255, 255, 0.13);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-        }
-
-        .subject-badge {
-            border-radius: 8px;
-            background:
-                linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 38%),
-                linear-gradient(135deg, #E50914, #760007);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 16px 34px rgba(229, 9, 20, 0.24);
-        }
-
-        .pricing-section,
-        .cta-section {
-            border-radius: 8px;
-            background:
-                radial-gradient(circle at 20% 0%, rgba(229, 9, 20, 0.38), transparent 36%),
-                linear-gradient(135deg, #151820, #050608 62%, #340006);
-            border: 1px solid rgba(255, 255, 255, 0.13);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
-        }
-
-        .startup-popup-overlay {
-            background:
-                radial-gradient(circle at 50% 12%, rgba(229, 9, 20, 0.34), transparent 32%),
-                rgba(3, 4, 6, 0.84);
-            backdrop-filter: blur(10px);
-        }
-
-        .startup-popup {
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.025)),
-                linear-gradient(160deg, rgba(27, 30, 38, 0.98), rgba(5, 6, 8, 0.98));
-            box-shadow:
-                0 0 0 1px rgba(229, 9, 20, 0.26),
-                0 34px 100px rgba(0, 0, 0, 0.68);
-        }
-        
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-                padding: 3rem 0;
-                min-height: auto;
-            }
-
-            .entry-actions-inner {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-
-            .entry-actions-buttons {
-                justify-content: stretch;
-            }
-
-            .entry-actions-buttons .btn {
-                flex: 1 1 100%;
-            }
-
-            .startup-popup-header {
-                padding: 0.875rem 1rem;
-            }
-
-            .startup-popup-header h2 {
-                font-size: 1.1rem;
-            }
-            
-            .hero-buttons {
-                flex-direction: column;
-            }
-            
-            .features-grid,
-            .classes-grid,
-            .subjects-grid,
-            .testimonials-grid {
-                gap: 1rem;
-            }
-            
-            .pricing-section {
-                padding: 2rem;
-            }
-            
-            .cta-section {
-                padding: 2rem;
-            }
-            
-            .cta-title {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="AJB LEARN is a complete digital learning platform for Assam Jatiya Bidyalaya students from Nursery to Class 10.">
+  <meta name="theme-color" content="#ed1c24">
+  <title>AJB LEARN | Learn Better. Grow Brighter.</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/images/ajb-logo.png">
+  <link rel="stylesheet" href="css/ajb-premium.css">
 </head>
-<body>
-    <!-- Notification Container -->
-    <div id="notificationContainer"></div>
-
-    <!-- Navigation - Sticky & Responsive -->
-    <nav class="navbar" role="navigation" aria-label="Main Navigation">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-            <div class="navbar-brand">
-                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
-                <span>AJB Learn</span>
-            </div>
-
-            <button class="navbar-toggle" id="navToggle" aria-label="Toggle Menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-
-            <ul class="navbar-menu" id="navMenu">
-                <li class="navbar-item"><a href="#features">Features</a></li>
-                <li class="navbar-item"><a href="#classes">Classes</a></li>
-                <li class="navbar-item"><a href="demo.html">Demo Classes</a></li>
-                <li class="navbar-item"><a href="#faq">FAQ</a></li>
-                <li class="navbar-cta">
-                    <button id="darkModeToggle" class="btn btn-ghost btn-icon" title="Toggle Dark Mode">🌙</button>
-                    <a href="login.html" class="btn btn-outline btn-sm">Login</a>
-                    <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-primary btn-sm">Unlock</a>
-                </li>
-            </ul>
-        </div>
+<body class="ajb-app">
+  <header class="site-header">
+    <nav class="site-nav ajb-container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="AJB Learn home">
+        <img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo">
+        <span class="brand-copy"><strong>AJB LEARN</strong><small>Learn. Practice. Grow.</small></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="ebook.html">E-Book</a></li>
+        <li><a href="practice.html">Practice</a></li>
+        <li><a href="quiz.html">MCQ</a></li>
+        <li><a href="demo.html">Demo Videos</a></li>
+        <li><a href="subscription.html">Subscription</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" data-theme-toggle title="Toggle dark mode" aria-label="Toggle dark mode"><i data-lucide="moon" size="17"></i></button>
+        <a class="btn btn-primary desktop-label" href="login.html"><i data-lucide="log-in" size="15"></i> Login</a>
+        <button class="menu-toggle" type="button" data-menu-toggle aria-label="Open menu"><i data-lucide="menu" size="19"></i></button>
+      </div>
     </nav>
+  </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Entry Actions -->
-        <section class="entry-actions" aria-label="Quick access">
-            <div class="container">
-                <div class="entry-actions-inner">
-                    <div>
-                        <h2 class="entry-actions-title">Watch Video or Unlock Courses</h2>
-                        <p class="entry-actions-text">Watch the demo video or unlock every premium course.</p>
-                    </div>
-                    <div class="entry-actions-buttons">
-                        <a href="https://www.youtube.com/watch?v=fPO76Jlnz6c" class="btn btn-outline btn-sm" target="_blank" rel="noopener">VIDEO LINK</a>
-                        <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-sm pay-now-btn">Unlock All Courses</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Hero Section -->
-        <section class="hero" data-animate="fade-in">
-            <div class="hero-content">
-                <h1>Transform Your Learning Journey</h1>
-                <p class="hero-subtitle">Expert-led video classes, comprehensive study materials, and interactive quizzes for Classes Nursery to 10</p>
-                <div class="hero-buttons">
-                    <a href="https://www.youtube.com/watch?v=fPO76Jlnz6c" class="btn btn-primary btn-lg hover-lift" target="_blank" rel="noopener">VIDEO LINK</a>
-                    <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-outline btn-lg hover-lift">Unlock All Courses</a>
-                </div>
-            </div>
-            <div class="hero-image fade-in-slow">
-                <div class="hero-video">
-                    <iframe
-                        src="https://www.youtube.com/embed/fPO76Jlnz6c?rel=0&modestbranding=1&playsinline=1"
-                        title="AJB Learn video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                    </iframe>
-                </div>
-                <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" style="width: 100%; max-width: 500px; animation: float 3s ease-in-out infinite;">
-                    <defs>
-                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#0F4C81;stop-opacity:0.1" />
-                            <stop offset="100%" style="stop-color:#FFB703;stop-opacity:0.1" />
-                        </linearGradient>
-                    </defs>
-                    <circle cx="200" cy="200" r="180" fill="url(#grad1)"/>
-                    <rect x="100" y="100" width="200" height="200" fill="#0F4C81" rx="15" opacity="0.8"/>
-                    <text x="200" y="210" font-size="80" text-anchor="middle" fill="white" font-weight="bold">📚</text>
-                </svg>
-            </div>
-        </section>
-
-        <div class="container">
-            <!-- Features Section -->
-            <section id="features" class="py-4xl" data-animate="fade-in">
-                <h2 class="text-center mb-4xl">Why Choose AJB Learn?</h2>
-                <div class="features-grid">
-                    <div class="feature-card stagger-item">
-                        <div class="feature-icon">🎥</div>
-                        <h3 class="feature-title">HD Video Classes</h3>
-                        <p>Expert-delivered lessons with clear explanations and visual demonstrations</p>
-                    </div>
-                    <div class="feature-card stagger-item">
-                        <div class="feature-icon">📚</div>
-                        <h3 class="feature-title">Study Materials</h3>
-                        <p>Complete notes, PDFs, and resources for every chapter</p>
-                    </div>
-                    <div class="feature-card stagger-item">
-                        <div class="feature-icon">✅</div>
-                        <h3 class="feature-title">Online Tests</h3>
-                        <p>Interactive quizzes with instant results and detailed feedback</p>
-                    </div>
-                    <div class="feature-card stagger-item">
-                        <div class="feature-icon">📊</div>
-                        <h3 class="feature-title">Progress Tracking</h3>
-                        <p>Monitor your learning with detailed analytics and performance reports</p>
-                    </div>
-                    <div class="feature-card stagger-item">
-                        <div class="feature-icon">🌍</div>
-                        <h3 class="feature-title">Learn Anywhere</h3>
-                        <p>Access content on any device - mobile, tablet, or desktop</p>
-                    </div>
-                    <div class="feature-card stagger-item">
-                        <div class="feature-icon">🏆</div>
-                        <h3 class="feature-title">Lifetime Access</h3>
-                        <p>One-time payment for permanent access to all content</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Classes Section -->
-            <section id="classes" class="py-4xl" data-animate="fade-in">
-                <h2 class="text-center mb-4xl">Available Classes</h2>
-                <div class="classes-grid">
-                    <div class="class-card stagger-item" onclick="selectClass('nursery')">
-                        <div class="class-number">N</div>
-                        <div class="class-name">Nursery</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('kg')">
-                        <div class="class-number">K</div>
-                        <div class="class-name">KG</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('1')">
-                        <div class="class-number">1</div>
-                        <div class="class-name">Class 1</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('2')">
-                        <div class="class-number">2</div>
-                        <div class="class-name">Class 2</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('3')">
-                        <div class="class-number">3</div>
-                        <div class="class-name">Class 3</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('4')">
-                        <div class="class-number">4</div>
-                        <div class="class-name">Class 4</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('5')">
-                        <div class="class-number">5</div>
-                        <div class="class-name">Class 5</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('6')">
-                        <div class="class-number">6</div>
-                        <div class="class-name">Class 6</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('7')">
-                        <div class="class-number">7</div>
-                        <div class="class-name">Class 7</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('8')">
-                        <div class="class-number">8</div>
-                        <div class="class-name">Class 8</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('9')">
-                        <div class="class-number">9</div>
-                        <div class="class-name">Class 9</div>
-                    </div>
-                    <div class="class-card stagger-item" onclick="selectClass('10')">
-                        <div class="class-number">10</div>
-                        <div class="class-name">Class 10</div>
-                    </div>
-                </div>
-
-                <div id="publicCourseOutline" class="public-outline">
-                    <!-- Public class, subject, and chapter outline will be loaded here -->
-                </div>
-            </section>
-
-            <!-- Subjects Section -->
-            <section id="subjects" class="py-4xl" data-animate="fade-in">
-                <h2 class="text-center mb-4xl">Subjects Covered</h2>
-                <div class="subjects-grid">
-                    <div class="subject-badge">English</div>
-                    <div class="subject-badge">Assamese</div>
-                    <div class="subject-badge">Mathematics</div>
-                    <div class="subject-badge">Hindi</div>
-                    <div class="subject-badge">Science</div>
-                    <div class="subject-badge">Social Studies</div>
-                    <div class="subject-badge">EVS</div>
-                    <div class="subject-badge">Computer</div>
-                    <div class="subject-badge">General Knowledge</div>
-                    <div class="subject-badge">Moral Education</div>
-                </div>
-            </section>
-
-            <!-- Pricing Section -->
-            <section class="pricing-section" data-animate="fade-in">
-                <h2 style="color: white; margin-bottom: 2rem;">Simple, Transparent Pricing</h2>
-                <div class="pricing-card">
-                    <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">AJB Premium</div>
-                    <div class="price">₹299</div>
-                    <div class="price-period">Lifetime Access</div>
-                    <ul class="benefits-list">
-                        <li>All Classes & Subjects</li>
-                        <li>HD Video Classes</li>
-                        <li>Complete Study Materials</li>
-                        <li>Online Quizzes</li>
-                        <li>Progress Tracking</li>
-                        <li>Lifetime Updates</li>
-                        <li>Bilingual Support</li>
-                        <li>Mobile Friendly</li>
-                    </ul>
-                    <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-secondary btn-lg" style="width: 100%;">Unlock All Courses</a>
-                </div>
-            </section>
-
-            <!-- Testimonials Section -->
-            <section id="testimonials" class="py-4xl" data-animate="fade-in">
-                <h2 class="text-center mb-4xl">What Students Say</h2>
-                <div class="testimonials-grid">
-                    <div class="testimonial-card stagger-item">
-                        <div class="star-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="testimonial-text">"AJB Learn made studying so much easier! The video classes are clear and the notes are comprehensive."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">R</div>
-                            <div>
-                                <h4>Rajesh Kumar</h4>
-                                <p class="author-role">Class 5 Student</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-card stagger-item">
-                        <div class="star-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="testimonial-text">"I loved the quizzes! They help me practice and track my progress. Highly recommended!"</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">P</div>
-                            <div>
-                                <h4>Priya Sharma</h4>
-                                <p class="author-role">Class 8 Student</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testimonial-card stagger-item">
-                        <div class="star-rating">⭐⭐⭐⭐⭐</div>
-                        <p class="testimonial-text">"Affordable and effective! My grades improved significantly after using AJB Learn."</p>
-                        <div class="testimonial-author">
-                            <div class="author-avatar">A</div>
-                            <div>
-                                <h4>Asha Dutta</h4>
-                                <p class="author-role">Class 10 Student</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- FAQ Section -->
-            <section id="faq" class="py-4xl" data-animate="fade-in">
-                <h2 class="text-center mb-4xl">Frequently Asked Questions</h2>
-                <div class="faq-section">
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>What is included in the subscription?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            Your subscription includes access to all video classes from Nursery to Class 10, complete study materials in PDF format, interactive quizzes, progress tracking, and lifetime updates.
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Is the subscription really lifetime?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            Yes! Your lifetime subscription means you get permanent access to all content with one-time payment of ₹299. You can access the platform anytime without any recurring charges.
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Can I watch videos offline?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            Currently, videos are streamed online. However, all study materials (PDFs) can be downloaded for offline access. We're working on offline video support.
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>What if I have technical issues?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            We have a dedicated support team ready to help. Contact us via email at support@ajblearn.com or call our helpline. We typically respond within 24 hours.
-                        </div>
-                    </div>
-
-                    <div class="faq-item">
-                        <div class="faq-question" onclick="toggleFAQ(this)">
-                            <span>Can I cancel my subscription?</span>
-                            <span class="faq-toggle">▼</span>
-                        </div>
-                        <div class="faq-answer">
-                            Since it's a lifetime subscription with one-time payment, there's no cancellation needed. However, if you want a refund within 30 days of purchase, we offer 100% money-back guarantee.
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- CTA Section -->
-            <section class="cta-section" data-animate="fade-in">
-                <h3 class="cta-title">Ready to Transform Your Learning?</h3>
-                <p class="cta-subtitle">Join thousands of students already learning on AJB Learn</p>
-                <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-primary btn-lg" style="background: white; color: var(--primary); border: none;">Unlock All Courses</a>
-            </section>
+  <main>
+    <section class="hero-section">
+      <div class="hero-grid ajb-container">
+        <div class="hero-copy">
+          <span class="eyebrow">Built for AJB students</span>
+          <h1>Everything you need to <span>learn better.</span></h1>
+          <p>Concept videos, chapter notes, practice sets and smart quizzes for Assam Jatiya Bidyalaya students, from Nursery to Class 10.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg" href="course.html"><i data-lucide="play" size="17"></i> Start Learning</a>
+            <a class="btn btn-secondary btn-lg" href="demo.html"><i data-lucide="monitor-play" size="17"></i> Watch Free Demo</a>
+          </div>
+          <div class="hero-proof">
+            <span class="avatar-stack"><span>AS</span><span>RB</span><span>NK</span><span>+</span></span>
+            <span>Trusted by students and parents across Assam</span>
+          </div>
         </div>
-    </main>
 
-    <!-- Footer -->
-    <footer style="background: var(--dark); color: white; padding: 4rem 0 2rem; margin-top: 4rem;">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-section">
-                    <h3>About AJB Learn</h3>
-                    <p>Premium online tuition platform for Assam Jatiya Bidyalaya students with HD videos, study materials, and interactive quizzes.</p>
+        <div class="learning-preview" aria-label="AJB Learn platform preview">
+          <div class="floating-card top">
+            <span class="floating-icon"><i data-lucide="trophy" size="18"></i></span>
+            <span><strong>Weekly goal complete</strong><small>5 day learning streak</small></span>
+          </div>
+          <div class="preview-window">
+            <div class="preview-topbar"><i></i><i></i><i></i></div>
+            <div class="preview-body">
+              <div class="preview-sidebar"><b></b><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="preview-content">
+                <div class="preview-video">
+                  <a class="play-button" href="course.html" aria-label="Open lesson"><i data-lucide="play" size="22" fill="currentColor"></i></a>
                 </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#features">Features</a></li>
-                        <li><a href="#classes">Classes</a></li>
-                        <li><a href="demo.html">Demo Classes</a></li>
-                        <li><a href="#faq">FAQ</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><a href="mailto:support@ajblearn.com">support@ajblearn.com</a></li>
-                        <li><a href="tel:+919876543210">+91 9876543210</a></li>
-                        <li><a href="terms.html">Privacy Policy</a></li>
-                        <li><a href="terms.html">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Follow Us</h3>
-                    <ul>
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">YouTube</a></li>
-                        <li><a href="#">Instagram</a></li>
-                    </ul>
-                </div>
+                <div class="preview-lines"><strong></strong><span></span><span></span><span></span></div>
+              </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 AJB Learn. All rights reserved. Made with ❤️ for Assam Jatiya Bidyalaya</p>
-            </div>
+          </div>
+          <div class="floating-card bottom">
+            <span class="floating-icon"><i data-lucide="circle-check-big" size="18"></i></span>
+            <span><strong>72% course progress</strong><small>Keep going, you are doing well</small></span>
+          </div>
         </div>
-    </footer>
+      </div>
+    </section>
 
-    <!-- Bottom Navigation (Mobile) -->
-    <nav class="bottom-nav" id="bottomNav" style="display: none;">
-        <ul class="bottom-nav-items">
-            <li class="bottom-nav-item" onclick="window.location.href='index.html'">
-                <div class="bottom-nav-icon">🏠</div>
-                <span>Home</span>
-            </li>
-            <li class="bottom-nav-item" onclick="window.location.href='demo.html'">
-                <div class="bottom-nav-icon">📺</div>
-                <span>Demo</span>
-            </li>
-            <li class="bottom-nav-item" onclick="window.location.href='dashboard.html'">
-                <div class="bottom-nav-icon">📚</div>
-                <span>Learn</span>
-            </li>
-            <li class="bottom-nav-item" onclick="window.location.href='login.html'">
-                <div class="bottom-nav-icon">👤</div>
-                <span>Account</span>
-            </li>
-        </ul>
-    </nav>
+    <section class="stats-strip" aria-label="Platform facts">
+      <div class="stats-row ajb-container">
+        <div class="stat-item"><strong>11</strong><span>Class levels</span></div>
+        <div class="stat-item"><strong>9+</strong><span>Core subjects</span></div>
+        <div class="stat-item"><strong>2</strong><span>Learning mediums</span></div>
+        <div class="stat-item"><strong>₹299</strong><span>One-time access</span></div>
+      </div>
+    </section>
 
-    <!-- Startup Payment & Demo Video Popup -->
-    <div id="startupPopup" class="startup-popup-overlay" aria-hidden="true">
-        <div class="startup-popup" role="dialog" aria-modal="true" aria-labelledby="startupPopupTitle">
-            <div class="startup-popup-header">
-                <h2 id="startupPopupTitle">Demo Video</h2>
-                <button type="button" class="startup-popup-close" id="startupPopupClose" aria-label="Close popup">&times;</button>
-            </div>
-            <div class="startup-popup-video">
-                <iframe
-                    id="startupVideoFrame"
-                    title="AJB Learn demo video"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    referrerpolicy="strict-origin-when-cross-origin"
-                    allowfullscreen>
-                </iframe>
-            </div>
-            <div class="startup-popup-actions">
-                <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-primary btn-lg">Pay Now</a>
-                <a href="https://www.youtube.com/watch?v=fPO76Jlnz6c" class="btn btn-outline btn-lg" target="_blank" rel="noopener">Open Video Link</a>
-            </div>
+    <section class="section section-white" id="features">
+      <div class="ajb-container">
+        <div class="section-head center">
+          <span class="eyebrow">A complete learning system</span>
+          <h2>Study with clarity, practice with confidence.</h2>
+          <p>Every feature is designed to help students understand the lesson, revise it quickly and measure real progress.</p>
         </div>
+        <div class="feature-grid">
+          <article class="feature-card"><span class="card-icon"><i data-lucide="monitor-play"></i></span><h3>Chapter Video Lessons</h3><p>Focused explanations that follow the AJB curriculum chapter by chapter.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="file-text"></i></span><h3>Notes and E-Books</h3><p>Downloadable study material that makes revision faster and more organised.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="list-checks"></i></span><h3>Practice and MCQ</h3><p>Mixed question formats, instant results and answer keys for active recall.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="chart-no-axes-combined"></i></span><h3>Progress Tracking</h3><p>Continue watching, mark chapters complete and see subject-level progress.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="languages"></i></span><h3>Two Mediums</h3><p>Learn in English Medium or Assamese Medium with relevant subject content.</p></article>
+          <article class="feature-card"><span class="card-icon"><i data-lucide="smartphone"></i></span><h3>Learn Anywhere</h3><p>Install AJB LEARN as an app and study comfortably on mobile, tablet or desktop.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="classes">
+      <div class="ajb-container">
+        <div class="section-head">
+          <span class="eyebrow">Nursery to Class 10</span>
+          <h2>One platform for every learning stage.</h2>
+          <p>Select a class and jump directly into its lessons, notes, practice and quizzes.</p>
+        </div>
+        <div class="class-grid">
+          <a class="class-card active" href="course.html?class=Nursery"><strong>Nursery</strong><span>Foundation</span></a>
+          <a class="class-card" href="course.html?class=1"><strong>01</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=2"><strong>02</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=3"><strong>03</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=4"><strong>04</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=5"><strong>05</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=6"><strong>06</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=7"><strong>07</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=8"><strong>08</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=9"><strong>09</strong><span>Class</span></a>
+          <a class="class-card" href="course.html?class=10"><strong>10</strong><span>Class</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white" id="subjects">
+      <div class="ajb-container">
+        <div class="section-head center">
+          <span class="eyebrow">Subjects that matter</span>
+          <h2>Learn every core subject in one place.</h2>
+        </div>
+        <div class="subject-grid">
+          <article class="subject-card"><span class="card-icon"><i data-lucide="sigma"></i></span><h3>Mathematics</h3><p>Concepts, examples and problem solving</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="flask-conical"></i></span><h3>Science and EVS</h3><p>Explore ideas through clear explanations</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="languages"></i></span><h3>Languages</h3><p>English, Assamese and Hindi</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="landmark"></i></span><h3>Social Science</h3><p>History, geography and society</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="monitor-cog"></i></span><h3>Computer</h3><p>Digital skills from the foundation up</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="brain"></i></span><h3>General Knowledge</h3><p>Build awareness beyond the textbook</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="notebook-tabs"></i></span><h3>Practice Sets</h3><p>Chapter-wise questions and answers</p></article>
+          <article class="subject-card"><span class="card-icon"><i data-lucide="badge-check"></i></span><h3>Assessments</h3><p>Timed quizzes with instant feedback</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="split-layout ajb-container">
+        <div>
+          <div class="section-head">
+            <span class="eyebrow">Simple premium access</span>
+            <h2>No monthly fees. Just focused learning.</h2>
+            <p>A single AJB Premium payment unlocks the complete platform and future content updates.</p>
+          </div>
+          <div class="benefit-list">
+            <div class="benefit-item"><i><i data-lucide="infinity" size="17"></i></i><span><strong>Lifetime learning access</strong><span>Return to lessons and notes whenever you need them.</span></span></div>
+            <div class="benefit-item"><i><i data-lucide="shield-check" size="17"></i></i><span><strong>Secure Razorpay checkout</strong><span>A trusted and straightforward payment experience.</span></span></div>
+            <div class="benefit-item"><i><i data-lucide="sparkles" size="17"></i></i><span><strong>Future updates included</strong><span>New lessons and improvements are included with the plan.</span></span></div>
+          </div>
+        </div>
+        <article class="price-card">
+          <span class="eyebrow">AJB Premium</span>
+          <h3>Complete platform access</h3>
+          <div class="price"><sup>₹</sup><strong>299</strong></div>
+          <p>One-time payment. No recurring charge.</p>
+          <ul class="price-features">
+            <li><i data-lucide="check" size="16"></i> All classes and subjects</li>
+            <li><i data-lucide="check" size="16"></i> Videos, notes and e-books</li>
+            <li><i data-lucide="check" size="16"></i> Practice questions and MCQ quizzes</li>
+            <li><i data-lucide="check" size="16"></i> Progress, bookmarks and certificates</li>
+          </ul>
+          <a class="btn btn-primary btn-lg" href="subscription.html">Unlock AJB Premium <i data-lucide="arrow-right" size="16"></i></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-white" id="testimonials">
+      <div class="ajb-container">
+        <div class="section-head center">
+          <span class="eyebrow">What families say</span>
+          <h2>Made for confident, independent study.</h2>
+        </div>
+        <div class="testimonial-grid">
+          <article class="testimonial-card"><div class="stars">★★★★★</div><p>“The chapter videos make difficult topics much easier to understand, and the notes are very useful before school tests.”</p><div class="person"><span class="person-avatar">RB</span><span><strong>Riya Baruah</strong><small>Class 8 student</small></span></div></article>
+          <article class="testimonial-card"><div class="stars">★★★★★</div><p>“I can see what my son has completed and where he needs more practice. It gives his home study a proper structure.”</p><div class="person"><span class="person-avatar">PD</span><span><strong>Pranab Das</strong><small>Parent</small></span></div></article>
+          <article class="testimonial-card"><div class="stars">★★★★★</div><p>“English and Assamese Medium content in the same platform is very convenient. The one-time price is also genuinely helpful.”</p><div class="person"><span class="person-avatar">NK</span><span><strong>Nabanita Kalita</strong><small>Parent</small></span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="ajb-container">
+        <div class="section-head center">
+          <span class="eyebrow">Frequently asked</span>
+          <h2>Quick answers before you begin.</h2>
+        </div>
+        <div class="faq-list">
+          <article class="faq-item open"><button class="faq-question" type="button">Which classes are covered?<i data-lucide="chevron-down" size="17"></i></button><div class="faq-answer">AJB LEARN covers Nursery and Classes 1 through 10, with content organised by medium, class, subject and chapter.</div></article>
+          <article class="faq-item"><button class="faq-question" type="button">Is ₹299 a monthly payment?<i data-lucide="chevron-down" size="17"></i></button><div class="faq-answer">No. AJB Premium is a one-time payment that unlocks all available content and future platform updates.</div></article>
+          <article class="faq-item"><button class="faq-question" type="button">Can I use AJB LEARN on a phone?<i data-lucide="chevron-down" size="17"></i></button><div class="faq-answer">Yes. The platform is fully responsive and can be installed as a Progressive Web App on supported Android devices.</div></article>
+          <article class="faq-item"><button class="faq-question" type="button">Does it save video and quiz progress?<i data-lucide="chevron-down" size="17"></i></button><div class="faq-answer">Yes. Learning progress is saved locally and can also sync to Google Sheets through the configured Apps Script backend.</div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="cta-panel ajb-container">
+        <h2>Build a stronger learning routine today.</h2>
+        <p>Start with a free demo, explore the platform and unlock every class when you are ready.</p>
+        <div class="hero-actions">
+          <a class="btn btn-secondary btn-lg" href="demo.html">Watch Demo</a>
+          <a class="btn btn-primary btn-lg" style="background:#171719" href="subscription.html">Get AJB Premium</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="ajb-container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="index.html"><img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo"><span class="brand-copy"><strong style="color:#fff">AJB LEARN</strong><small>Learn. Practice. Grow.</small></span></a>
+          <p>A focused digital learning platform for Assam Jatiya Bidyalaya students from Nursery to Class 10.</p>
+        </div>
+        <div class="footer-col"><h4>Learn</h4><a href="course.html">Video Lessons</a><a href="ebook.html">E-Books</a><a href="practice.html">Practice</a><a href="quiz.html">MCQ</a></div>
+        <div class="footer-col"><h4>Platform</h4><a href="dashboard.html">Dashboard</a><a href="subscription.html">AJB Premium</a><a href="login.html">Student Login</a><a href="admin.html">Admin</a></div>
+        <div class="footer-col"><h4>Support</h4><a href="#faq">FAQs</a><a href="terms.html">Terms</a><a href="mailto:support@ajblearn.in">Contact</a><button class="btn btn-sm btn-secondary" data-install-app hidden>Install App</button></div>
+      </div>
+      <div class="footer-bottom"><span>© 2026 AJB LEARN. All rights reserved.</span><span>Made for students across Assam.</span></div>
     </div>
+  </footer>
 
-    <!-- Scripts -->
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/youtube.js"></script>
-    <script src="js/ui.js"></script>
-    
-    <script>
-        // Toggle FAQ
-        function toggleFAQ(element) {
-            const question = element;
-            const answer = element.nextElementSibling;
-            const toggle = question.querySelector('.faq-toggle');
-            
-            const allAnswers = document.querySelectorAll('.faq-answer');
-            const allToggles = document.querySelectorAll('.faq-toggle');
-            
-            allAnswers.forEach(a => a.classList.remove('show'));
-            allToggles.forEach(t => t.classList.remove('show'));
-            
-            answer.classList.add('show');
-            toggle.classList.add('show');
-        }
-
-        const publicClassNames = {
-            nursery: 'Nursery',
-            kg: 'KG',
-            1: 'Class 1',
-            2: 'Class 2',
-            3: 'Class 3',
-            4: 'Class 4',
-            5: 'Class 5',
-            6: 'Class 6',
-            7: 'Class 7',
-            8: 'Class 8',
-            9: 'Class 9',
-            10: 'Class 10'
-        };
-
-        const publicClassOrder = ['nursery', 'kg', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
-
-        const publicChapterTemplates = {
-            English: ['Alphabet and Phonics', 'Reading Practice', 'Grammar Basics', 'Writing Skills'],
-            Assamese: ['Barnamala', 'Reading Practice', 'Grammar Basics', 'Writing Skills'],
-            Mathematics: ['Numbers and Counting', 'Addition and Subtraction', 'Multiplication and Division', 'Geometry and Measurement'],
-            EVS: ['Myself and Family', 'Plants and Animals', 'Food, Water and Shelter', 'Our Environment'],
-            Science: ['Matter Around Us', 'Plants and Animals', 'Human Body', 'Force, Energy and Motion'],
-            'Social Studies': ['Our State Assam', 'India and the World', 'Maps and Directions', 'History and Civics'],
-            Hindi: ['Varnamala', 'Reading Practice', 'Grammar Basics', 'Writing Skills'],
-            Computer: ['Computer Basics', 'Keyboard and Mouse', 'Typing and Drawing Tools', 'Internet Safety'],
-            'General Knowledge': ['India and Assam', 'Important Days', 'Sports and Culture', 'Current Awareness'],
-            'Moral Education': ['Good Habits', 'Discipline and Respect', 'Safety and Responsibility', 'Helping Others'],
-            Rhymes: ['English Rhymes', 'Assamese Rhymes', 'Story Time', 'Action Songs'],
-            Drawing: ['Lines and Shapes', 'Colouring Practice', 'Craft Activities', 'Picture Reading']
-        };
-
-        function getSubjectsForClass(className) {
-            if (className === 'nursery' || className === 'kg') {
-                return ['Rhymes', 'English', 'Assamese', 'Mathematics', 'EVS', 'Drawing'];
-            }
-
-            const numericClass = Number(className);
-            if (numericClass >= 1 && numericClass <= 4) {
-                return ['English', 'Assamese', 'Mathematics', 'EVS', 'Hindi', 'General Knowledge', 'Moral Education'];
-            }
-
-            if (numericClass >= 5 && numericClass <= 8) {
-                return ['English', 'Assamese', 'Mathematics', 'Science', 'Social Studies', 'Hindi', 'Computer', 'General Knowledge'];
-            }
-
-            return ['English', 'Assamese', 'Mathematics', 'Science', 'Social Studies', 'Hindi', 'Computer'];
-        }
-
-        function renderPublicCourseOutline(className = 'nursery') {
-            const outline = document.getElementById('publicCourseOutline');
-            if (!outline) return;
-
-            const subjects = getSubjectsForClass(className);
-            const classLabel = publicClassNames[className] || className;
-            const subjectHtml = subjects.map(subject => {
-                const chapters = publicChapterTemplates[subject] || ['Chapter 1', 'Chapter 2', 'Chapter 3'];
-                const chaptersHtml = chapters.map(chapter => `<li>${chapter}</li>`).join('');
-                return `
-                    <div class="outline-subject">
-                        <h4>${subject}</h4>
-                        <ol class="outline-chapters">${chaptersHtml}</ol>
-                    </div>
-                `;
-            }).join('');
-
-            outline.innerHTML = `
-                <div class="public-outline-header">
-                    <div>
-                        <h3 class="public-outline-title">${classLabel} Subjects and Chapters</h3>
-                        <p class="public-outline-subtitle">You can view the class structure without login. Premium videos, notes and quizzes unlock after subscription.</p>
-                    </div>
-                    <a href="https://rzp.io/rzp/yLnOO4y" class="btn btn-primary">Unlock Full Lessons</a>
-                </div>
-                <div class="outline-subjects">${subjectHtml}</div>
-            `;
-
-            document.querySelectorAll('.class-card').forEach(card => {
-                card.classList.toggle('active-outline', card.getAttribute('onclick')?.includes(`'${className}'`));
-            });
-        }
-
-        // Select class without requiring login
-        function selectClass(className) {
-            localStorage.setItem('selectedClass', className);
-            renderPublicCourseOutline(className);
-            document.getElementById('publicCourseOutline')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-
-        renderPublicCourseOutline('nursery');
-
-        // Show demo notification
-        window.addEventListener('load', () => {
-            if (false && !localStorage.getItem('visitedBefore')) {
-                setTimeout(() => {
-                    showNotification('Welcome to AJB Learn! 🎓 Watch our free demo classes to get started.', 'info', 5000);
-                    localStorage.setItem('visitedBefore', 'true');
-                }, 1000);
-            }
-        });
-
-        function openStartupPopup() {
-            const popup = document.getElementById('startupPopup');
-            const videoFrame = document.getElementById('startupVideoFrame');
-            if (!popup || !videoFrame) return;
-
-            YoutubeUtils.prepareYoutubeIframe(videoFrame, 'fPO76Jlnz6c');
-            popup.classList.add('show');
-            popup.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeStartupPopup() {
-            const popup = document.getElementById('startupPopup');
-            const videoFrame = document.getElementById('startupVideoFrame');
-            if (!popup || !videoFrame) return;
-
-            popup.classList.remove('show');
-            popup.setAttribute('aria-hidden', 'true');
-            videoFrame.src = '';
-            document.body.style.overflow = '';
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(openStartupPopup, 600);
-        });
-
-        document.getElementById('startupPopupClose').addEventListener('click', closeStartupPopup);
-        document.getElementById('startupPopup').addEventListener('click', (event) => {
-            if (event.target.id === 'startupPopup') {
-                closeStartupPopup();
-            }
-        });
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                closeStartupPopup();
-            }
-        });
-    </script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/site.js"></script>
 </body>
 </html>

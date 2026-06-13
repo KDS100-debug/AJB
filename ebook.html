@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search and download AJB LEARN e-books and chapter notes.">
+  <title>E-Books | AJB LEARN</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="css/ajb-premium.css">
+</head>
+<body class="ajb-app">
+  <header class="site-header">
+    <nav class="site-nav ajb-container">
+      <a class="brand" href="index.html"><img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo"><span class="brand-copy"><strong>AJB LEARN</strong><small>Digital Library</small></span></a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li><li><a href="ebook.html">E-Book</a></li><li><a href="practice.html">Practice</a></li><li><a href="quiz.html">MCQ</a></li><li><a href="course.html">Learn</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn" data-theme-toggle title="Toggle dark mode"><i data-lucide="moon" size="17"></i></button>
+        <a class="btn btn-primary desktop-label" href="login.html">Login</a>
+        <button class="menu-toggle" data-menu-toggle aria-label="Open menu"><i data-lucide="menu" size="19"></i></button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-row ajb-container">
+        <div><span class="eyebrow">Digital library</span><h1>E-Books and Notes</h1><p>Find chapter books, revision notes and printable study material for your class.</p></div>
+        <label class="search-box"><i data-lucide="search" size="17"></i><input id="resourceSearch" type="search" placeholder="Search books, chapters or subjects"></label>
+      </div>
+    </section>
+    <div class="ajb-container">
+      <form class="filter-bar" id="ebookFilters">
+        <div class="field"><label>Medium</label><select data-filter="medium"><option value="">All mediums</option></select></div>
+        <div class="field"><label>Class</label><select data-filter="class"><option value="">All classes</option></select></div>
+        <div class="field"><label>Subject</label><select data-filter="subject"><option value="">All subjects</option></select></div>
+        <div class="field"><label>Chapter</label><select data-filter="chapter"><option value="">All chapters</option></select></div>
+        <button class="btn btn-primary" type="submit"><i data-lucide="list-filter" size="15"></i> Apply</button>
+      </form>
+      <section class="resource-grid" id="ebookGrid" aria-live="polite"></section>
+    </div>
+  </main>
+
+  <footer class="site-footer"><div class="ajb-container"><div class="footer-bottom" style="margin-top:0"><span>© 2026 AJB LEARN</span><span>Books, notes and revision in one place.</span></div></div></footer>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/resources.js"></script>
+</body>
+</html>

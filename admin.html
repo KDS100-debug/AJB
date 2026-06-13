@@ -1,192 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - AJB Learn</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/admin.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin Panel | AJB LEARN</title>
+  <link rel="stylesheet" href="css/ajb-premium.css">
 </head>
-<body>
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
-                <h1>AJB <span>ADMIN</span></h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="#" class="nav-link" id="adminName">Admin</a></li>
-                <li><a href="#" class="nav-link" id="logoutBtn">Logout</a></li>
-            </ul>
-        </div>
+<body class="ajb-app">
+  <header class="site-header">
+    <nav class="site-nav ajb-container">
+      <a class="brand" href="index.html"><img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo"><span class="brand-copy"><strong>AJB ADMIN</strong><small>Google Sheets Management</small></span></a>
+      <ul class="nav-links"><li><a href="index.html">View Website</a></li><li><a href="course.html">Learning Room</a></li><li><a href="dashboard.html">Student Dashboard</a></li></ul>
+      <div class="nav-actions"><button class="icon-btn" data-sidebar-toggle title="Open admin menu"><i data-lucide="panel-left" size="17"></i></button><button class="icon-btn" data-theme-toggle title="Toggle dark mode"><i data-lucide="moon" size="17"></i></button><button class="btn btn-primary desktop-label" id="adminLogout" type="button">Logout</button><button class="menu-toggle" data-menu-toggle aria-label="Open menu"><i data-lucide="menu" size="19"></i></button></div>
     </nav>
+  </header>
 
-    <div class="admin-container">
-        <aside class="admin-sidebar">
-            <div class="sidebar-header">
-                <h3>Admin Menu</h3>
-            </div>
-            <ul class="sidebar-menu">
-                <li><a href="#" class="menu-item active" data-section="dashboard">Dashboard</a></li>
-                <li><a href="#" class="menu-item" data-section="students">Students</a></li>
-                <li><a href="#" class="menu-item" data-section="classes">Classes</a></li>
-                <li><a href="#" class="menu-item" data-section="videos">Videos</a></li>
-                <li><a href="#" class="menu-item" data-section="payments">Payments</a></li>
-            </ul>
-        </aside>
+  <main class="app-layout">
+    <aside class="app-sidebar">
+      <div class="profile-mini"><span class="profile-avatar">AD</span><span><strong id="adminDisplayName">Administrator</strong><span>Direct Sheets access</span></span></div>
+      <nav class="app-menu">
+        <a class="active" href="#" data-panel-target="adminDashboard"><i data-lucide="layout-dashboard" size="16"></i> Dashboard</a>
+        <a href="#" data-panel-target="students"><i data-lucide="users" size="16"></i> Students</a>
+        <a href="#" data-panel-target="mediums"><i data-lucide="languages" size="16"></i> Mediums</a>
+        <a href="#" data-panel-target="classes"><i data-lucide="school" size="16"></i> Classes</a>
+        <a href="#" data-panel-target="subjects"><i data-lucide="library" size="16"></i> Subjects</a>
+        <a href="#" data-panel-target="chapters"><i data-lucide="list-tree" size="16"></i> Chapters</a>
+        <a href="#" data-panel-target="videos"><i data-lucide="video" size="16"></i> Videos</a>
+        <a href="#" data-panel-target="ebooks"><i data-lucide="file-text" size="16"></i> E-Books</a>
+        <a href="#" data-panel-target="practice"><i data-lucide="pencil-line" size="16"></i> Practice</a>
+        <a href="#" data-panel-target="mcq"><i data-lucide="list-checks" size="16"></i> MCQ</a>
+        <a href="#" data-panel-target="announcements"><i data-lucide="megaphone" size="16"></i> Announcements</a>
+        <a href="#" data-panel-target="settings"><i data-lucide="settings" size="16"></i> Settings</a>
+        <a href="#" data-panel-target="payments"><i data-lucide="indian-rupee" size="16"></i> Payments</a>
+        <a href="#" data-panel-target="studentProgress"><i data-lucide="chart-no-axes-combined" size="16"></i> Progress</a>
+      </nav>
+    </aside>
 
-        <main class="admin-content">
-            <section id="dashboard" class="admin-section active">
-                <h2>Dashboard Overview</h2>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">Users</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="totalStudents">0</div>
-                            <div class="stat-label">Total Students</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Paid</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="activeStudents">0</div>
-                            <div class="stat-label">Paid Users</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">INR</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="totalRevenue">&#8377;0</div>
-                            <div class="stat-label">Total Revenue</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Video</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="totalVideos">0</div>
-                            <div class="stat-label">Total Videos</div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="students" class="admin-section">
-                <h2>Manage Students</h2>
-                <div class="section-actions">
-                    <input type="text" id="studentSearch" placeholder="Search students..." class="search-input">
-                </div>
-                <div class="table-container">
-                    <table id="studentsTable" class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Mobile</th>
-                                <th>Subscription</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="classes" class="admin-section">
-                <h2>Manage Classes</h2>
-                <div class="table-container">
-                    <table id="classesTable" class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Class ID</th>
-                                <th>Class Name</th>
-                                <th>Medium</th>
-                                <th>Subjects</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </section>
-
-            <section id="videos" class="admin-section">
-                <h2>Manage Videos</h2>
-                <p>Use the Google Sheet VIDEOS tab to add or update video records.</p>
-                <p>For iframe playback, add Public or Unlisted YouTube videos and keep YouTube's Allow embedding setting enabled. Private, age-restricted, or embed-disabled videos can only open through the direct YouTube link.</p>
-            </section>
-
-            <section id="payments" class="admin-section">
-                <h2>Payment Management</h2>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">INR</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="paymentTotalRevenue">&#8377;0</div>
-                            <div class="stat-label">Total Revenue</div>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">Paid</div>
-                        <div class="stat-content">
-                            <div class="stat-number" id="paymentPaidUsers">0</div>
-                            <div class="stat-label">Total Paid Users</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section-actions">
-                    <input type="date" id="paymentDateFilter" class="filter-select">
-                    <input type="text" id="paymentUserFilter" class="search-input" placeholder="Filter by name, email, mobile, or payment ID">
-                    <select id="paymentStatusFilter" class="filter-select">
-                        <option value="">All Status</option>
-                        <option value="captured">Captured</option>
-                        <option value="success">Success</option>
-                        <option value="failed">Failed</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                    <button class="btn btn-secondary" id="clearPaymentFilters">Clear</button>
-                </div>
-
-                <div class="table-container">
-                    <table id="paymentsTable" class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Payment ID</th>
-                                <th>User Name</th>
-                                <th>Email</th>
-                                <th>Mobile</th>
-                                <th>Razorpay Payment ID</th>
-                                <th>Amount</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="modalBody"></div>
+    <div class="app-content">
+      <section class="admin-section active" id="adminDashboard">
+        <div class="app-topline"><div><span class="eyebrow">Live Sheets overview</span><h1>Admin Dashboard</h1><p>Every number below is loaded from Google Sheets.</p></div><button class="btn btn-primary" data-panel-jump="videos"><i data-lucide="plus" size="15"></i> Add Video</button></div>
+        <div class="metric-grid">
+          <article class="metric-card"><span>Total students</span><div class="metric-row"><strong id="totalStudents">0</strong><span class="metric-icon"><i data-lucide="users" size="16"></i></span></div></article>
+          <article class="metric-card"><span>Paid users</span><div class="metric-row"><strong id="activeStudents">0</strong><span class="metric-icon"><i data-lucide="badge-check" size="16"></i></span></div></article>
+          <article class="metric-card"><span>Total revenue</span><div class="metric-row"><strong id="totalRevenue">₹0</strong><span class="metric-icon"><i data-lucide="indian-rupee" size="16"></i></span></div></article>
+          <article class="metric-card"><span>Total videos</span><div class="metric-row"><strong id="totalVideos">0</strong><span class="metric-icon"><i data-lucide="video" size="16"></i></span></div></article>
         </div>
+        <article class="panel"><div class="panel-head"><h2>Recent Students</h2><button class="btn btn-secondary btn-sm" data-panel-jump="students">Manage Students</button></div><div class="data-table-wrap"><table class="data-table"><thead><tr><th>Name</th><th>Email</th><th>Subscription</th><th>Account</th></tr></thead><tbody id="recentStudentsBody"></tbody></table></div></article>
+      </section>
+
+      <section class="admin-section" id="students">
+        <div class="app-topline"><div><span class="eyebrow">USERS sheet</span><h1>Students</h1><p>Search users and update account or subscription status.</p></div><label class="search-box"><i data-lucide="search" size="15"></i><input id="studentSearch" placeholder="Search student"></label></div>
+        <div class="data-table-wrap"><table class="data-table" id="studentsTable"><thead><tr><th>Name</th><th>Email</th><th>Mobile</th><th>Subscription</th><th>Account</th><th>Actions</th></tr></thead><tbody></tbody></table></div>
+      </section>
+
+      <section class="admin-section" id="mediums">
+        <div class="app-topline"><div><span class="eyebrow">MEDIUMS sheet</span><h1>Mediums</h1><p>Add, edit and delete learning mediums.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="mediums">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium Name</label><input name="MEDIUM_NAME" required></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Medium</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="mediums"></div>
+      </section>
+
+      <section class="admin-section" id="classes">
+        <div class="app-topline"><div><span class="eyebrow">CLASSES sheet</span><h1>Classes</h1><p>Manage class levels for each medium.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="classes">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class Name</label><input name="CLASS_NAME" required></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Class</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="classes"></div>
+      </section>
+
+      <section class="admin-section" id="subjects">
+        <div class="app-topline"><div><span class="eyebrow">SUBJECTS sheet</span><h1>Subjects</h1><p>Manage subjects assigned to a class and medium.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="subjects">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class</label><select name="CLASS_ID" data-lookup="classes" required></select></div>
+          <div class="field"><label>Subject Name</label><input name="SUBJECT_NAME" required></div>
+          <div class="field"><label>Icon</label><input name="ICON" placeholder="book-open"></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Subject</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="subjects"></div>
+      </section>
+
+      <section class="admin-section" id="chapters">
+        <div class="app-topline"><div><span class="eyebrow">CHAPTERS sheet</span><h1>Chapters</h1><p>Build the chapter sequence for every subject.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="chapters">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class</label><select name="CLASS_ID" data-lookup="classes" required></select></div>
+          <div class="field"><label>Subject</label><select name="SUBJECT_ID" data-lookup="subjects" required></select></div>
+          <div class="field"><label>Chapter Name</label><input name="CHAPTER_NAME" required></div>
+          <div class="field wide"><label>Description</label><textarea name="DESCRIPTION"></textarea></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Chapter</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="chapters"></div>
+      </section>
+
+      <section class="admin-section" id="videos">
+        <div class="app-topline"><div><span class="eyebrow">VIDEOS sheet</span><h1>Videos</h1><p>Publish YouTube lessons and update their metadata.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="videos">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class</label><select name="CLASS_ID" data-lookup="classes" required></select></div>
+          <div class="field"><label>Subject</label><select name="SUBJECT_ID" data-lookup="subjects" required></select></div>
+          <div class="field"><label>Chapter</label><select name="CHAPTER_ID" data-lookup="chapters" required></select></div>
+          <div class="field wide"><label>Video Title</label><input name="TITLE" required></div>
+          <div class="field wide"><label>Description</label><textarea name="DESCRIPTION"></textarea></div>
+          <div class="field wide"><label>YouTube Link</label><input name="YOUTUBE_LINK" type="url" required></div>
+          <div class="field"><label>Thumbnail URL</label><input name="THUMBNAIL" type="url"></div>
+          <div class="field"><label>Duration Seconds</label><input name="DURATION_SECONDS" type="number"></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Video</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="videos"></div>
+      </section>
+
+      <section class="admin-section" id="ebooks">
+        <div class="app-topline"><div><span class="eyebrow">EBOOKS sheet</span><h1>E-Books</h1><p>Attach PDF links and thumbnails to chapters.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="ebooks">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class</label><select name="CLASS_ID" data-lookup="classes" required></select></div>
+          <div class="field"><label>Subject</label><select name="SUBJECT_ID" data-lookup="subjects" required></select></div>
+          <div class="field"><label>Chapter</label><select name="CHAPTER_ID" data-lookup="chapters" required></select></div>
+          <div class="field wide"><label>Book Title</label><input name="TITLE" required></div>
+          <div class="field wide"><label>Description</label><textarea name="DESCRIPTION"></textarea></div>
+          <div class="field"><label>PDF Link</label><input name="PDF_LINK" type="url" required></div>
+          <div class="field"><label>Thumbnail URL</label><input name="THUMBNAIL" type="url"></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save E-Book</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="ebooks"></div>
+      </section>
+
+      <section class="admin-section" id="practice">
+        <div class="app-topline"><div><span class="eyebrow">PRACTICE sheet</span><h1>Practice Questions</h1><p>Create chapter questions and answer keys.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="practice">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class</label><select name="CLASS_ID" data-lookup="classes" required></select></div>
+          <div class="field"><label>Subject</label><select name="SUBJECT_ID" data-lookup="subjects" required></select></div>
+          <div class="field"><label>Chapter</label><select name="CHAPTER_ID" data-lookup="chapters" required></select></div>
+          <div class="field"><label>Question Type</label><select name="QUESTION_TYPE"><option>Fill in the blanks</option><option>Match the following</option><option>Short answer</option><option>Long answer</option></select></div>
+          <div class="field wide"><label>Question</label><textarea name="QUESTION" required></textarea></div>
+          <div class="field wide"><label>Answer Key</label><textarea name="ANSWER_KEY" required></textarea></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Question</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="practice"></div>
+      </section>
+
+      <section class="admin-section" id="mcq">
+        <div class="app-topline"><div><span class="eyebrow">MCQ sheet</span><h1>MCQ Questions</h1><p>Create quizzes with server-checked answers.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="mcq">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Medium</label><select name="MEDIUM_ID" data-lookup="mediums" required></select></div>
+          <div class="field"><label>Class</label><select name="CLASS_ID" data-lookup="classes" required></select></div>
+          <div class="field"><label>Subject</label><select name="SUBJECT_ID" data-lookup="subjects" required></select></div>
+          <div class="field"><label>Chapter</label><select name="CHAPTER_ID" data-lookup="chapters" required></select></div>
+          <div class="field wide"><label>Quiz Title</label><input name="QUIZ_TITLE" value="Chapter Quiz" required></div>
+          <div class="field wide"><label>Question</label><textarea name="QUESTION" required></textarea></div>
+          <div class="field"><label>Option A</label><input name="OPTION_A" required></div>
+          <div class="field"><label>Option B</label><input name="OPTION_B" required></div>
+          <div class="field"><label>Option C</label><input name="OPTION_C" required></div>
+          <div class="field"><label>Option D</label><input name="OPTION_D" required></div>
+          <div class="field"><label>Correct Answer</label><select name="CORRECT_ANSWER"><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+          <div class="field"><label>Time Seconds</label><input name="TIME_SECONDS" type="number" value="60"></div>
+          <div class="field wide"><label>Explanation</label><textarea name="EXPLANATION"></textarea></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Sort Order</label><input name="SORT_ORDER" type="number" value="1"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save MCQ</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="mcq"></div>
+      </section>
+
+      <section class="admin-section" id="announcements">
+        <div class="app-topline"><div><span class="eyebrow">ANNOUNCEMENTS sheet</span><h1>Announcements</h1><p>Publish notices shown on student dashboards.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="announcements">
+          <input type="hidden" data-record-id>
+          <div class="field wide"><label>Title</label><input name="TITLE" required></div>
+          <div class="field wide"><label>Message</label><textarea name="MESSAGE" required></textarea></div>
+          <div class="field"><label>Audience</label><select name="AUDIENCE"><option>ALL</option><option>STUDENTS</option><option>PAID_USERS</option></select></div>
+          <div class="field"><label>Status</label><select name="STATUS"><option>ACTIVE</option><option>INACTIVE</option></select></div>
+          <div class="field"><label>Start Date</label><input name="START_DATE" type="date"></div>
+          <div class="field"><label>End Date</label><input name="END_DATE" type="date"></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Announcement</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="announcements"></div>
+      </section>
+
+      <section class="admin-section" id="settings">
+        <div class="app-topline"><div><span class="eyebrow">SETTINGS sheet</span><h1>Settings</h1><p>Manage platform-level key/value configuration.</p></div></div>
+        <article class="panel"><form class="form-grid admin-form" data-entity="settings">
+          <input type="hidden" data-record-id>
+          <div class="field"><label>Setting Key</label><input name="SETTING_KEY" required></div>
+          <div class="field"><label>Setting Value</label><input name="SETTING_VALUE" required></div>
+          <div class="field wide"><label>Description</label><textarea name="DESCRIPTION"></textarea></div>
+          <div class="wide"><button class="btn btn-primary" type="submit">Save Setting</button> <button class="btn btn-secondary" type="button" data-cancel-edit>Clear</button></div>
+        </form></article>
+        <div data-admin-table="settings"></div>
+      </section>
+
+      <section class="admin-section" id="payments">
+        <div class="app-topline"><div><span class="eyebrow">PAYMENTS sheet</span><h1>Payments</h1><p>Review Razorpay transactions recorded by Apps Script.</p></div></div>
+        <div data-admin-table="payments"></div>
+      </section>
+
+      <section class="admin-section" id="studentProgress">
+        <div class="app-topline"><div><span class="eyebrow">PROGRESS and COMPLETED_CHAPTERS</span><h1>Student Progress</h1><p>Review saved video positions and chapter completions.</p></div></div>
+        <h3 style="margin-top:0">Video Progress</h3><div data-admin-table="progress"></div>
+        <h3 style="margin-top:28px">Completed Chapters</h3><div data-admin-table="completedchapters"></div>
+        <h3 style="margin-top:28px">Quiz Scores</h3><div data-admin-table="leaderboard"></div>
+      </section>
     </div>
+  </main>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024 AJB Learn Admin Panel</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/admin.js"></script>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/site.js"></script>
+  <script src="js/admin-panel.js"></script>
 </body>
 </html>

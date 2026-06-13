@@ -1,221 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscribe - AJB Learn</title>
-    <link rel="stylesheet" href="css/style.css">
-    <style>
-        .secure-payment-badges {
-            display: grid;
-            gap: 10px;
-            margin: 20px 0;
-        }
-
-        .secure-payment-badges span {
-            display: block;
-            padding: 10px 12px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, rgba(229, 9, 20, 0.18), rgba(255, 255, 255, 0.08));
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            color: #F5F7FA;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .guest-payment-panel {
-            margin: 24px 0;
-            padding: 18px;
-            border-radius: 8px;
-            background:
-                linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
-                radial-gradient(circle at top left, rgba(229, 9, 20, 0.22), transparent 36%);
-            border: 1px solid rgba(255, 255, 255, 0.14);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
-        }
-
-        .guest-payment-panel h4 {
-            margin: 0 0 6px;
-            color: #FFFFFF;
-            font-size: 18px;
-        }
-
-        .guest-payment-panel p {
-            margin: 0 0 14px;
-            color: #C5CAD3;
-            font-size: 14px;
-        }
-
-        .guest-fields {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .guest-fields label {
-            display: grid;
-            gap: 6px;
-            color: #F5F7FA;
-            font-size: 13px;
-            font-weight: 700;
-        }
-
-        .guest-fields input {
-            width: 100%;
-            min-height: 44px;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.16);
-            background: rgba(5, 5, 7, 0.72);
-            color: #FFFFFF;
-        }
-
-        .guest-fields input:focus {
-            border-color: rgba(229, 9, 20, 0.9);
-            box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.22);
-            outline: none;
-        }
-
-        .payment-message {
-            margin-top: 15px;
-            color: #C5CAD3;
-            font-size: 14px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .guest-fields {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Unlock AJB Premium for a one-time payment of ₹299.">
+  <title>AJB Premium | AJB LEARN</title>
+  <link rel="stylesheet" href="css/ajb-premium.css">
 </head>
-<body data-page="subscription">
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-brand">
-                <img src="assets/images/ajb-logo.png" alt="AJB Learn Logo" class="brand-logo">
-                <h1>AJB <span>LEARN</span></h1>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="demo.html" class="nav-link">Video Link</a></li>
-                <li><a href="register.html" class="nav-link btn-primary">Register Optional</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
+<body class="ajb-app" data-page="subscription">
+  <header class="site-header">
+    <nav class="site-nav ajb-container">
+      <a class="brand" href="index.html"><img class="brand-mark" src="assets/images/ajb-logo.png" alt="AJB LEARN logo"><span class="brand-copy"><strong>AJB LEARN</strong><small>Premium Access</small></span></a>
+      <ul class="nav-links"><li><a href="index.html">Home</a></li><li><a href="demo.html">Demo Videos</a></li><li><a href="course.html">Learning Room</a></li><li><a href="login.html">Login</a></li></ul>
+      <div class="nav-actions"><button class="icon-btn" data-theme-toggle title="Toggle dark mode"><i data-lucide="moon" size="17"></i></button><button class="menu-toggle" data-menu-toggle aria-label="Open menu"><i data-lucide="menu" size="19"></i></button></div>
     </nav>
-
-    <section class="page-header">
-        <div class="container">
-            <h1>Unlock AJB Premium</h1>
-            <p>No login required for payment. Pay once and get unlimited access to all courses and content.</p>
-        </div>
+  </header>
+  <main>
+    <section class="page-hero">
+      <div class="page-hero-row ajb-container">
+        <div><span class="eyebrow">Simple one-time access</span><h1>Unlock every AJB lesson.</h1><p>One payment gives your student access to the complete AJB LEARN platform and future content updates.</p></div>
+        <span style="color:var(--ajb-success);display:flex;gap:8px;align-items:center;font-size:12px;font-weight:800"><i data-lucide="shield-check" size="18"></i> Secure Razorpay payment</span>
+      </div>
     </section>
-
-    <section class="subscription-section">
-        <div class="container">
-            <div class="pricing-cards">
-                <div class="pricing-card featured">
-                    <div class="plan-badge">RECOMMENDED</div>
-                    <h3>AJB Premium</h3>
-                    <div class="price">
-                        <span class="currency">&#8377;</span>
-                        <span class="amount">299</span>
-                        <span class="period">One-time Payment</span>
-                    </div>
-                    <p class="plan-description">Lifetime access to all premium learning content.</p>
-
-                    <ul class="features-list">
-                        <li>All Classes - Nursery to Class 10</li>
-                        <li>All Subjects and All Mediums</li>
-                        <li>All Videos, Notes, and Quizzes</li>
-                        <li>Unlimited Course Access</li>
-                        <li>Complete Study Materials</li>
-                        <li>Progress Tracking</li>
-                        <li>Lifetime Updates</li>
-                        <li>Bilingual Support - English and Assamese</li>
-                    </ul>
-
-                    <div class="secure-payment-badges">
-                        <span>Secure payment powered by Razorpay</span>
-                        <span>Login is optional before payment</span>
-                    </div>
-
-                    <div class="guest-payment-panel">
-                        <h4>Payment Details</h4>
-                        <p>These details are only used for Razorpay prefill, receipt, and access activation.</p>
-                        <div class="guest-fields">
-                            <label for="buyerName">
-                                Name
-                                <input type="text" id="buyerName" autocomplete="name" placeholder="Student or parent name">
-                            </label>
-                            <label for="buyerEmail">
-                                Email
-                                <input type="email" id="buyerEmail" autocomplete="email" placeholder="Receipt email">
-                            </label>
-                            <label for="buyerMobile">
-                                Mobile
-                                <input type="tel" id="buyerMobile" autocomplete="tel" inputmode="numeric" placeholder="10 digit mobile">
-                            </label>
-                        </div>
-                    </div>
-
-                    <a href="demo.html" class="btn btn-secondary btn-large btn-full" style="margin-bottom: 12px;">Watch Demo Video</a>
-                    <a id="subscribeBtn" href="https://rzp.io/rzp/yLnOO4y" class="btn btn-primary btn-large btn-full">Unlock All Courses</a>
-                    <a id="paymentLinkBtn" href="https://rzp.io/rzp/yLnOO4y" class="btn btn-secondary btn-large btn-full" style="margin-top: 12px;">Pay With Razorpay Link</a>
-                    <p class="payment-message">Checkout opens without login. Automatic unlock works after verification; the payment link accepts payments instantly while backend setup is pending.</p>
-                </div>
-            </div>
-
-            <div class="subscription-info">
-                <h3>Why Subscribe?</h3>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-icon">AJB</div>
-                        <h4>Complete Curriculum</h4>
-                        <p>Covers all subjects from Nursery to Class 10</p>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon">HD</div>
-                        <h4>HD Video Content</h4>
-                        <p>High-quality video lessons by expert teachers</p>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon">PDF</div>
-                        <h4>Study Materials</h4>
-                        <p>Complete notes and resources in PDF format</p>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-icon">QZ</div>
-                        <h4>Online Tests</h4>
-                        <p>Regular quizzes to test your knowledge</p>
-                    </div>
-                </div>
-            </div>
+    <section class="section">
+      <div class="split-layout ajb-container">
+        <div>
+          <div class="section-head"><span class="eyebrow">Everything included</span><h2>Complete learning for Nursery to Class 10.</h2><p>English Medium and Assamese Medium content with no recurring subscription charge.</p></div>
+          <div class="benefit-list">
+            <div class="benefit-item"><i><i data-lucide="monitor-play" size="17"></i></i><span><strong>All video lessons</strong><span>Every available class, subject and chapter.</span></span></div>
+            <div class="benefit-item"><i><i data-lucide="files" size="17"></i></i><span><strong>Notes, e-books and downloads</strong><span>Revision material ready whenever it is needed.</span></span></div>
+            <div class="benefit-item"><i><i data-lucide="list-checks" size="17"></i></i><span><strong>Practice and MCQ quizzes</strong><span>Instant results, answer keys and leaderboard scores.</span></span></div>
+            <div class="benefit-item"><i><i data-lucide="chart-no-axes-combined" size="17"></i></i><span><strong>Progress and certificates</strong><span>Track completed chapters and learning milestones.</span></span></div>
+          </div>
         </div>
+        <article class="price-card">
+          <span class="eyebrow">AJB Premium</span>
+          <h3>Lifetime platform access</h3>
+          <div class="price"><sup>₹</sup><strong>299</strong></div>
+          <p>One-time payment. No renewal required.</p>
+          <form class="form-grid" id="buyerForm" style="margin-top:24px">
+            <div class="field wide"><label style="color:#aaaab2">Student / Parent Name</label><input id="buyerName" required autocomplete="name" placeholder="Full name" style="background:#222226;color:#fff;border-color:#34343a"></div>
+            <div class="field"><label style="color:#aaaab2">Email</label><input id="buyerEmail" type="email" autocomplete="email" placeholder="Receipt email" style="background:#222226;color:#fff;border-color:#34343a"></div>
+            <div class="field"><label style="color:#aaaab2">Mobile</label><input id="buyerMobile" type="tel" autocomplete="tel" placeholder="10 digit mobile" style="background:#222226;color:#fff;border-color:#34343a"></div>
+            <div class="wide"><a class="btn btn-primary btn-lg" id="subscribeBtn" href="https://rzp.io/rzp/yLnOO4y" style="width:100%">Unlock AJB Premium <i data-lucide="arrow-right" size="16"></i></a></div>
+          </form>
+          <p id="paymentMessage" style="margin:15px 0 0;text-align:center;font-size:10px">Secure checkout powered by Razorpay.</p>
+        </article>
+      </div>
     </section>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-bottom">
-                <p>&copy; 2024 AJB Learn. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script src="js/api.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/payment.js"></script>
-    <script>
-        document.querySelector('.hamburger').addEventListener('click', function() {
-            document.querySelector('.nav-menu').classList.toggle('active');
-        });
-    </script>
+  </main>
+  <footer class="site-footer"><div class="ajb-container"><div class="footer-bottom" style="margin-top:0"><span>© 2026 AJB LEARN</span><span>One payment. Every class. Better learning.</span></div></div></footer>
+  <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/site.js"></script>
 </body>
 </html>

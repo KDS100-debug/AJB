@@ -68,7 +68,9 @@ The Razorpay payment link is used for instant payment collection. All payment CT
 
 ## Google Sheets Setup
 
-Deploy `apps-script/Code.gs` in Google Apps Script, then run `setupDatabase()` once. It creates or updates these sheets:
+Deploy `apps-script/Code.gs` in Google Apps Script, then run `setupSheets()` once.
+The backend also creates `SESSIONS` and `PASSWORD_RESETS` for secure login and
+OTP recovery.
 
 - `USERS`: `USER_ID`, `NAME`, `MOBILE`, `EMAIL`, `PASSWORD_HASH`, `REGISTER_DATE`, `SUBSCRIPTION_STATUS`, `ROLE`
 - `PAYMENTS`: `PAYMENT_ID`, `USER_ID`, `NAME`, `EMAIL`, `MOBILE`, `AMOUNT`, `CURRENCY`, `PAYMENT_STATUS`, `RAZORPAY_PAYMENT_ID`, `RAZORPAY_ORDER_ID`, `RAZORPAY_SIGNATURE`, `PAYMENT_DATE`, `PLAN_NAME`
@@ -85,9 +87,20 @@ RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 ADMIN_EMAIL=admin@ajblearn.com
 ADMIN_PASSWORD=change-this-password
+ADMIN_API_KEY=use-a-long-random-secret
+SUPPORT_EMAIL=support@ajblearn.com
+DEFAULT_PHONE_COUNTRY_CODE=+91
 ```
 
-For stronger admin security, store `ADMIN_PASSWORD_HASH` instead of `ADMIN_PASSWORD`. The backend hashes passwords with SHA256.
+For phone OTP recovery, also configure a Twilio Verify service:
+
+```text
+TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+TWILIO_AUTH_TOKEN=your-twilio-auth-token
+TWILIO_VERIFY_SERVICE_SID=VAxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+Email OTP uses Google Apps Script `MailApp` and does not require Twilio.
 
 ## Apps Script Deployment
 
@@ -95,7 +108,7 @@ For stronger admin security, store `ADMIN_PASSWORD_HASH` instead of `ADMIN_PASSW
 2. Create a Google Apps Script project.
 3. Paste `apps-script/Code.gs` into the script editor.
 4. Add the Script Properties listed above.
-5. Run `setupDatabase()` once and approve permissions.
+5. Run `setupSheets()` once and approve permissions.
 6. Deploy > New deployment > Web app.
 7. Execute as: Me.
 8. Who has access: Anyone.
@@ -156,3 +169,6 @@ The frontend can be hosted on GitHub Pages, Netlify, or Vercel. The backend runs
 - The Razorpay Key Secret is never exposed in browser JavaScript.
 - Payment activation happens only after signature verification succeeds.
 - Passwords are stored as SHA256 hashes in the Google Sheet.
+- Password reset OTPs expire after 10 minutes, are attempt-limited, and are
+  verified only by the Apps Script backend.
+- A successful password reset revokes the student's active sessions.

@@ -1,6 +1,6 @@
 /* ============================================
-   AJB LEARN - MODERN CSS FOUNDATION
-   Advanced Mobile-First Responsive Design
+   AJB LEARN - FULL-FEATURED E-LEARNING PLATFORM
+   Modern, Accessible, Responsive Design System
    ============================================ */
 
 /* ============================================
@@ -8,32 +8,63 @@
    ============================================ */
 
 :root {
-  /* Colors - Red and Metal Black Premium Palette */
-  --primary: #E50914;
-  --primary-light: #FF3341;
-  --primary-dark: #8B0008;
-  --secondary: #C9D1D9;
-  --secondary-light: #F1F5F9;
-  --secondary-dark: #79818C;
-  --accent: #FF1F2D;
-  --accent-light: #FF5965;
-  --accent-dark: #A3000B;
-  --dark: #08090B;
-  --dark-light: #15171C;
+  /* Primary Colors - Modern Blue & Purple Gradient */
+  --primary: #6366F1;
+  --primary-light: #818CF8;
+  --primary-lighter: #A5B4FC;
+  --primary-dark: #4F46E5;
+  --primary-darker: #4338CA;
+  
+  /* Accent Colors */
+  --accent: #EC4899;
+  --accent-light: #F472B6;
+  --accent-dark: #BE185D;
+  
+  /* Secondary Colors - Teal/Cyan */
+  --secondary: #14B8A6;
+  --secondary-light: #2DD4BF;
+  --secondary-dark: #0D9488;
+  
+  /* Success, Warning, Danger */
+  --success: #10B981;
+  --success-light: #6EE7B7;
+  --warning: #F59E0B;
+  --warning-light: #FCD34D;
+  --danger: #EF4444;
+  --danger-light: #FCA5A5;
+  --info: #0EA5E9;
+  
+  /* Dark Mode - Deep, Professional */
+  --dark: #0F172A;
+  --dark-light: #1E293B;
+  --dark-lighter: #334155;
   --light: #0D0F13;
-  --light-dark: #242832;
-  --white: #111318;
-  --text: #F5F7FA;
-  --text-secondary: #C5CAD3;
-  --muted: #8F97A6;
-  --disabled: #4B5563;
-  --primary-color: var(--primary);
-  --secondary-color: var(--secondary);
-  --light-bg: #14161B;
-  --text-dark: var(--text);
-  --text-light: var(--text-secondary);
+  --light-dark: #1F2937;
+  
+  /* Light Mode */
+  --white: #FFFFFF;
+  --light-bg: #F8FAFC;
+  --light-border: #E2E8F0;
+  
+  /* Text Colors */
+  --text: #F1F5F9;
+  --text-secondary: #CBD5E1;
+  --text-muted: #94A3B8;
+  --muted: #64748B;
+  --disabled: #475569;
+  
+  /* Light Theme Text */
+  --text-light: #1E293B;
+  --text-light-secondary: #64748B;
+  
+  /* Shadows & Borders */
   --border-color: rgba(255, 255, 255, 0.12);
   --box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --error-color: #EF4444;
   
   /* Semantic Colors */
