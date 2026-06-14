@@ -117,7 +117,10 @@
     });
 
     if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-      navigator.serviceWorker.register('sw.js').catch(() => {});
+      navigator.serviceWorker
+        .register('sw.js?v=20260613')
+        .then((registration) => registration.update())
+        .catch(() => {});
     }
   }
 

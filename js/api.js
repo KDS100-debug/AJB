@@ -11,7 +11,7 @@ const CONFIG = window.CONFIG || {
   PLAN_DESCRIPTION: 'Complete Course Access',
   BRAND_NAME: 'AJB LEARN',
   THEME_COLOR: '#ED1C24',
-  LOGO_URL: 'assets/images/ajb-logo.png',
+  LOGO_URL: 'assets/images/ajb-logo.png?v=20260613',
   RAZORPAY_PAYMENT_LINK: 'https://rzp.io/rzp/yLnOO4y'
 };
 

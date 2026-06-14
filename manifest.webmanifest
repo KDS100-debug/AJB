@@ -10,7 +10,7 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "assets/images/ajb-logo.png",
+      "src": "assets/images/ajb-logo.png?v=20260613",
       "sizes": "1254x1254",
       "type": "image/png",
       "purpose": "any maskable"
