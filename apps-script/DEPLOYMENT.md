@@ -84,3 +84,19 @@ After changing `Code.gs`:
 2. Edit the Web App deployment.
 3. Create a **New version**.
 4. Deploy it.
+
+## Troubleshooting: "Unable to reach the AJB LEARN backend"
+
+That frontend message means the browser could not read a JSON response from
+Apps Script. Check these items first:
+
+1. `CONFIG.APPS_SCRIPT_URL` in `js/api.js` must be the latest Web App `/exec`
+   URL, not the editor URL, `/dev` URL, or an old deployment.
+2. The deployment must be **Web app**, **Execute as: Me**, and **Who has
+   access: Anyone**.
+3. After editing `Code.gs`, always create a **New version** in **Manage
+   deployments**. Saving the script alone does not update the live `/exec`
+   endpoint.
+4. Open the `/exec?action=health` URL in a browser. It should return JSON with
+   `success: true`; if it shows a Google sign-in, authorization, or HTML error
+   page, redeploy with the settings above.

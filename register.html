@@ -59,9 +59,17 @@
         mobile: document.getElementById('mobile').value.trim(),
         email: document.getElementById('email').value.trim(),
         password: document.getElementById('password').value,
+        medium: document.getElementById('registerMedium').value,
         mediumId: document.getElementById('registerMedium').value,
+        class: document.getElementById('registerClass').value,
+        className: document.getElementById('registerClass').value,
         classId: document.getElementById('registerClass').value
       };
+      if (!data.mediumId || !data.classId) {
+        message.className = 'auth-message error';
+        message.textContent = 'Select medium and class before creating the account.';
+        return;
+      }
       if (data.password !== document.getElementById('confirmPassword').value) {
         message.className = 'auth-message error';
         message.textContent = 'Passwords do not match.';
@@ -93,13 +101,15 @@
     async function loadRegistrationOptions() {
       const mediumSelect = document.getElementById('registerMedium');
       const classSelect = document.getElementById('registerClass');
+      async function loadClasses() {
+        const classes = (await getClasses(mediumSelect.value)).classes;
+        AJBLearn.setSelectOptions(classSelect, classes, 'Select class');
+      }
       try {
         const mediums = (await getMediums()).mediums;
         AJBLearn.setSelectOptions(mediumSelect, mediums, 'Select medium');
-        mediumSelect.addEventListener('change', async () => {
-          const classes = (await getClasses(mediumSelect.value)).classes;
-          AJBLearn.setSelectOptions(classSelect, classes, 'Select class');
-        });
+        await loadClasses();
+        mediumSelect.addEventListener('change', loadClasses);
       } catch (error) {
         document.getElementById('registerMessage').textContent = error.message;
         document.getElementById('registerMessage').className = 'auth-message error';

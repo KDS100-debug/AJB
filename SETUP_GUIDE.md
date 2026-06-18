@@ -64,7 +64,7 @@ USER1, Test User, 9876543210, test@example.com, pwd123, 2024-01-15T10:00:00Z, ac
 ```
 CLASS1, Class 1, english
 CLASS2, Class 2, english
-NURSERY, Nursery, english
+CLASS10, Class 10, english
 ```
 
 ---

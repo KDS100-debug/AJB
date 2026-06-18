@@ -97,10 +97,15 @@ HEADERS[SHEET_NAMES.MCQ] = [
 HEADERS[SHEET_NAMES.PROGRESS] = [
   'User ID',
   'Video ID',
+  'Chapter ID',
   'Chapter',
   'Completed (Yes/No)',
   'Quiz Score',
   'Completion Percentage',
+  'Position Seconds',
+  'Duration Seconds',
+  'Watched Percentage',
+  'Completed At',
   'Last Updated'
 ];
 HEADERS[SHEET_NAMES.BOOKS] = [
@@ -247,6 +252,10 @@ function doPost(e) {
     var result;
 
     switch (action) {
+      case 'health':
+      case '':
+        result = healthResponse();
+        break;
       case 'registerUser':
         result = registerUser(payload);
         break;
@@ -282,6 +291,72 @@ function doPost(e) {
         break;
       case 'getClasses':
         result = getClassesForFrontend(payload);
+        break;
+      case 'getSubjects':
+        result = getSubjectsForFrontend(payload);
+        break;
+      case 'getChapters':
+        result = getChaptersForFrontend(payload);
+        break;
+      case 'getVideos':
+        result = getVideosForFrontend(payload);
+        break;
+      case 'getEbooks':
+        result = getEbooksForFrontend(payload);
+        break;
+      case 'getPractice':
+        result = getPracticeForFrontend(payload);
+        break;
+      case 'getMCQ':
+        result = getMCQForFrontend(payload);
+        break;
+      case 'getLeaderboard':
+        result = getLeaderboardForFrontend(payload);
+        break;
+      case 'getAnnouncements':
+        result = getAnnouncementsForFrontend(payload);
+        break;
+      case 'getSettings':
+        result = getSettingsForFrontend();
+        break;
+      case 'getPublicCatalog':
+        result = getPublicCatalog(payload);
+        break;
+      case 'saveVideoProgress':
+        result = saveVideoProgress(payload);
+        break;
+      case 'markChapterCompleted':
+        result = markChapterCompleted(payload);
+        break;
+      case 'getStudentProgress':
+        result = getStudentProgress(payload);
+        break;
+      case 'saveQuizScore':
+        result = saveQuizScoreForFrontend(payload);
+        break;
+      case 'getDashboardOverview':
+        result = getDashboardOverview(payload);
+        break;
+      case 'createOrder':
+        result = createRazorpayOrder(payload);
+        break;
+      case 'verifyPayment':
+        result = verifyRazorpayPayment(payload);
+        break;
+      case 'getPaymentHistory':
+        result = getPaymentHistory(payload);
+        break;
+      case 'getDashboardStats':
+        requireSession(payload, true);
+        result = getDashboardStatsForAdmin();
+        break;
+      case 'getAllStudents':
+        requireSession(payload, true);
+        result = getAllStudentsForAdmin();
+        break;
+      case 'getAllPayments':
+        requireSession(payload, true);
+        result = getAllPaymentsForAdmin(payload);
         break;
       case 'updateLastLogin':
         result = updateLastLogin(payload);
@@ -331,6 +406,16 @@ function jsonError(error) {
     success: false,
     message: String(error && error.message ? error.message : error)
   });
+}
+
+function healthResponse() {
+  return {
+    success: true,
+    message: 'AJB LEARN API is running.',
+    sheets: Object.keys(SHEET_NAMES).map(function(key) {
+      return SHEET_NAMES[key];
+    })
+  };
 }
 
 function getSpreadsheet() {
@@ -454,7 +539,7 @@ function registerUser(payload) {
   var email = normalizeEmail(payload.email);
   var phone = normalizePhone(payload.phone || payload.mobile);
   var medium = cleanText(payload.medium || payload.mediumId);
-  var className = cleanText(payload.class || payload.classId);
+  var className = normalizeSupportedClassName(payload.class || payload.className || payload.classId);
   requireFields({
     name: payload.name,
     email: email,
@@ -466,6 +551,9 @@ function registerUser(payload) {
   validateEmail(email);
   validatePhone(phone);
   validateNewPassword(payload.password);
+  if (!className) {
+    throw new Error('Select a class from Class 1 to Class 10.');
+  }
 
   var users = getSheetData(SHEET_NAMES.USERS);
   var existing = users.some(function(user) {
@@ -715,12 +803,16 @@ function updateUserProfile(payload) {
   if (duplicatePhone) {
     throw new Error('That phone number is already registered.');
   }
+  var profileClass = normalizeSupportedClassName(profile.classId || user['Class']);
+  if (!profileClass) {
+    throw new Error('Select a class from Class 1 to Class 10.');
+  }
 
   updateSheetRow(SHEET_NAMES.USERS, user._rowNumber, {
     'Name': cleanText(profile.name || user['Name']),
     'Phone': phone,
     'Medium': cleanText(profile.mediumId || user['Medium']),
-    'Class': cleanText(profile.classId || user['Class']),
+    'Class': profileClass,
     'Profile Image': cleanText(profile.profileImage || user['Profile Image'])
   });
 
@@ -868,14 +960,44 @@ function getMediumsForFrontend() {
   };
 }
 
-function getClassesForFrontend(payload) {
-  var values = collectDistinctContentValues('Class', payload.mediumId || payload.medium);
-  if (!values.length) {
-    values = ['Nursery', 'KG'];
-    for (var classNumber = 1; classNumber <= 10; classNumber++) {
-      values.push('Class ' + classNumber);
-    }
+function getDefaultClassValues() {
+  var values = [];
+  for (var classNumber = 1; classNumber <= 10; classNumber++) {
+    values.push('Class ' + classNumber);
   }
+  return values;
+}
+
+function normalizeSupportedClassName(value) {
+  var text = cleanText(value).replace(/\s+/g, ' ');
+  var match = text.match(/^Class\s*0?([1-9]|10)$/i) ||
+    text.match(/^0?([1-9]|10)$/) ||
+    text.match(/^CLASS0?([1-9]|10)$/i);
+  return match ? 'Class ' + Number(match[1]) : '';
+}
+
+function getSupportedClassValues(values) {
+  var classMap = {};
+  getDefaultClassValues().forEach(function(value) {
+    classMap[normalizeComparable(value)] = value;
+  });
+  (values || []).forEach(function(value) {
+    var className = normalizeSupportedClassName(value);
+    if (className) {
+      classMap[normalizeComparable(className)] = className;
+    }
+  });
+  return Object.keys(classMap).map(function(key) {
+    return classMap[key];
+  }).sort(function(a, b) {
+    return Number(a.replace(/\D/g, '')) - Number(b.replace(/\D/g, ''));
+  });
+}
+
+function getClassesForFrontend(payload) {
+  var values = getSupportedClassValues(
+    collectDistinctContentValues('Class', payload.mediumId || payload.medium)
+  );
   return {
     success: true,
     classes: values.map(function(value) {
@@ -886,6 +1008,797 @@ function getClassesForFrontend(payload) {
       };
     })
   };
+}
+
+function getSubjectsForFrontend(payload) {
+  var items = collectDistinctFrontendItems(getContentRecords(), payload, {
+    idKeys: ['SUBJECT_ID', 'Subject ID', 'Subject'],
+    nameKeys: ['SUBJECT_NAME', 'Subject Name', 'Subject'],
+    scope: ['medium', 'class']
+  });
+  return { success: true, subjects: items };
+}
+
+function getChaptersForFrontend(payload) {
+  var items = collectDistinctFrontendItems(getContentRecords(), payload, {
+    idKeys: ['CHAPTER_ID', 'Chapter ID', 'Chapter'],
+    nameKeys: ['CHAPTER_NAME', 'Chapter Name', 'Chapter'],
+    descriptionKeys: ['DESCRIPTION', 'Description'],
+    scope: ['medium', 'class', 'subject']
+  });
+  return { success: true, chapters: items };
+}
+
+function getVideosForFrontend(payload) {
+  var videos = getSheetData(SHEET_NAMES.VIDEOS)
+    .filter(function(record) { return recordMatchesScope(record, payload, ['medium', 'class', 'subject', 'chapter']); })
+    .filter(isActiveRecord)
+    .map(videoToFrontend)
+    .sort(sortBySortOrderThenName);
+  return dataResponse('videos', videos);
+}
+
+function getEbooksForFrontend(payload) {
+  var records = getSheetData(SHEET_NAMES.BOOKS).map(function(record) {
+    return { record: record, source: 'books' };
+  }).concat(getSheetData(SHEET_NAMES.NOTES).map(function(record) {
+    return { record: record, source: 'notes' };
+  }));
+
+  var ebooks = records
+    .filter(function(item) { return recordMatchesScope(item.record, payload, ['medium', 'class', 'subject', 'chapter']); })
+    .filter(function(item) { return isActiveRecord(item.record); })
+    .map(function(item) { return ebookToFrontend(item.record, item.source); })
+    .filter(function(item) { return item.pdfLink; })
+    .sort(sortBySortOrderThenName);
+  return dataResponse('ebooks', ebooks);
+}
+
+function getPracticeForFrontend(payload) {
+  return dataResponse('questions', []);
+}
+
+function getMCQForFrontend(payload) {
+  var questions = getMCQRecordsForPayload(payload)
+    .map(function(record) { return mcqToFrontend(record, isAdminAuthorized(payload)); });
+  var quizTitle = questions.length ? questions[0].quizTitle : cleanText(payload.quizTitle || 'Chapter Quiz');
+  return {
+    success: true,
+    quizTitle: quizTitle || 'Chapter Quiz',
+    questions: questions,
+    mcq: questions,
+    count: questions.length,
+    data: questions
+  };
+}
+
+function getLeaderboardForFrontend(payload) {
+  var expectedChapter = cleanText(payload.chapterId || payload.chapter);
+  var expectedQuizTitle = cleanText(payload.quizTitle || 'Chapter Quiz');
+  var usersById = indexUsersById();
+  var rows = getSheetData(SHEET_NAMES.PROGRESS)
+    .filter(function(record) {
+      var videoId = cleanText(record['Video ID']);
+      var chapterId = cleanText(record['Chapter ID'] || record['Chapter']);
+      return videoId.indexOf('QUIZ_') === 0 &&
+        (!expectedChapter || normalizeComparable(chapterId) === normalizeComparable(expectedChapter));
+    })
+    .map(function(record) {
+      var parsed = parseQuizScore(record['Quiz Score']);
+      var user = usersById[cleanText(record['User ID'])] || {};
+      return {
+        userId: record['User ID'],
+        name: user['Name'] || 'Student',
+        quizTitle: expectedQuizTitle,
+        score: parsed.correct,
+        total: parsed.total,
+        percentage: parsed.percentage || Number(record['Completion Percentage'] || 0),
+        timeSeconds: Number(record['Duration Seconds'] || record['Position Seconds'] || 0),
+        date: record['Last Updated'] || record['Completed At'] || ''
+      };
+    })
+    .sort(function(a, b) {
+      if (Number(b.percentage) !== Number(a.percentage)) {
+        return Number(b.percentage) - Number(a.percentage);
+      }
+      return Number(a.timeSeconds || 0) - Number(b.timeSeconds || 0);
+    });
+
+  var limit = clampNumber(payload.limit, 1, 100, 20);
+  var leaderboard = rows.slice(0, limit).map(function(row, index) {
+    row.rank = index + 1;
+    return row;
+  });
+  return dataResponse('leaderboard', leaderboard);
+}
+
+function getAnnouncementsForFrontend() {
+  return dataResponse('announcements', []);
+}
+
+function getSettingsForFrontend() {
+  return {
+    success: true,
+    settings: {},
+    data: []
+  };
+}
+
+function getPublicCatalog(payload) {
+  var mediums = getMediumsForFrontend().mediums;
+  var classes = getClassesForFrontend(payload || {}).classes;
+  var subjects = getSubjectsForFrontend(payload || {}).subjects;
+  var chapters = getChaptersForFrontend(payload || {}).chapters;
+  return {
+    success: true,
+    mediums: mediums,
+    classes: classes,
+    subjects: subjects,
+    chapters: chapters
+  };
+}
+
+function saveVideoProgress(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+
+  var now = new Date().toISOString();
+  var userId = cleanText(session['User ID']);
+  var videoId = cleanText(payload.videoId);
+  requireFields({ videoId: videoId }, ['videoId']);
+
+  var watchedPercentage = clampNumber(payload.watchedPercentage, 0, 100, 0);
+  var completed = watchedPercentage >= 95 ? 'YES' : 'NO';
+  var record = {
+    'User ID': userId,
+    'Video ID': videoId,
+    'Chapter ID': cleanText(payload.chapterId || payload.chapter),
+    'Chapter': cleanText(payload.chapter || payload.chapterId),
+    'Completed (Yes/No)': completed,
+    'Quiz Score': '',
+    'Completion Percentage': watchedPercentage,
+    'Position Seconds': normalizeNumber(payload.positionSeconds, 0),
+    'Duration Seconds': normalizeNumber(payload.durationSeconds, 0),
+    'Watched Percentage': watchedPercentage,
+    'Completed At': completed === 'YES' ? now : '',
+    'Last Updated': now
+  };
+  upsertProgressRecord(userId, videoId, record);
+  return {
+    success: true,
+    message: 'Video progress saved.',
+    progress: progressToFrontend(findProgressRecord(userId, videoId) || record)
+  };
+}
+
+function markChapterCompleted(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+
+  var chapterId = cleanText(payload.chapterId || payload.chapter);
+  requireFields({ chapterId: chapterId }, ['chapterId']);
+  var now = new Date().toISOString();
+  var userId = cleanText(session['User ID']);
+  var videoId = 'CHAPTER_' + chapterId;
+  var record = {
+    'User ID': userId,
+    'Video ID': videoId,
+    'Chapter ID': chapterId,
+    'Chapter': chapterId,
+    'Completed (Yes/No)': 'YES',
+    'Quiz Score': '',
+    'Completion Percentage': 100,
+    'Position Seconds': 0,
+    'Duration Seconds': 0,
+    'Watched Percentage': 100,
+    'Completed At': now,
+    'Last Updated': now
+  };
+  upsertProgressRecord(userId, videoId, record);
+  return { success: true, message: 'Chapter marked complete.', chapterId: chapterId };
+}
+
+function getStudentProgress(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+
+  var userId = cleanText(session['User ID']);
+  var records = getSheetData(SHEET_NAMES.PROGRESS).filter(function(record) {
+    return cleanText(record['User ID']) === userId;
+  });
+  var progress = records
+    .filter(function(record) {
+      var videoId = cleanText(record['Video ID']);
+      return videoId.indexOf('QUIZ_') !== 0 && videoId.indexOf('CHAPTER_') !== 0;
+    })
+    .map(progressToFrontend);
+  var completedChapters = records
+    .filter(isCompletedChapterProgress)
+    .map(function(record) {
+      return {
+        chapterId: cleanText(record['Chapter ID'] || record['Chapter'] || cleanText(record['Video ID']).replace(/^CHAPTER_/, '')),
+        completedAt: record['Completed At'] || record['Last Updated'] || ''
+      };
+    });
+
+  return {
+    success: true,
+    progress: progress,
+    completedChapters: completedChapters
+  };
+}
+
+function saveQuizScoreForFrontend(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+  var chapterId = cleanText(payload.chapterId || payload.chapter);
+  requireFields({ chapterId: chapterId, answers: payload.answers }, ['chapterId', 'answers']);
+  if (!Array.isArray(payload.answers) || !payload.answers.length) {
+    throw new Error('answers must be a non-empty array.');
+  }
+
+  var answerMap = {};
+  payload.answers.forEach(function(answer) {
+    answerMap[cleanText(answer.mcqId || answer.id)] = normalizeAnswer(answer.answer);
+  });
+
+  var questions = getMCQRecordsForPayload(payload);
+  if (!questions.length) {
+    throw new Error('No MCQ questions found for this chapter.');
+  }
+
+  var correctCount = 0;
+  var results = questions.map(function(question) {
+    var questionId = getRecordValue(question, ['MCQ_ID', 'MCQ ID', 'Quiz ID']) || ('MCQ_ROW_' + question._rowNumber);
+    var submitted = answerMap[questionId] || '';
+    var expected = normalizeAnswer(getRecordValue(question, ['CORRECT_ANSWER', 'Correct Answer']));
+    var isCorrect = submitted === expected;
+    if (isCorrect) correctCount++;
+    return {
+      mcqId: questionId,
+      submittedAnswer: submitted,
+      correctAnswer: expected,
+      isCorrect: isCorrect,
+      explanation: getRecordValue(question, ['EXPLANATION', 'Explanation'])
+    };
+  });
+
+  var total = questions.length;
+  var wrongCount = total - correctCount;
+  var percentage = Math.round((correctCount / total) * 100);
+  var now = new Date().toISOString();
+  var userId = cleanText(session['User ID']);
+  var videoId = 'QUIZ_' + chapterId;
+  upsertProgressRecord(userId, videoId, {
+    'User ID': userId,
+    'Video ID': videoId,
+    'Chapter ID': chapterId,
+    'Chapter': chapterId,
+    'Completed (Yes/No)': 'YES',
+    'Quiz Score': correctCount + '/' + total,
+    'Completion Percentage': percentage,
+    'Position Seconds': normalizeNumber(payload.timeSeconds, 0),
+    'Duration Seconds': normalizeNumber(payload.timeSeconds, 0),
+    'Watched Percentage': 100,
+    'Completed At': now,
+    'Last Updated': now
+  });
+
+  return {
+    success: true,
+    message: 'Quiz score saved.',
+    score: correctCount,
+    correctCount: correctCount,
+    correctAnswers: correctCount,
+    wrongCount: wrongCount,
+    wrongAnswers: wrongCount,
+    total: total,
+    percentage: percentage,
+    results: results
+  };
+}
+
+function getDashboardOverview(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    return {
+      success: true,
+      user: validateSession(payload).user,
+      videosWatched: 0,
+      quizzesCompleted: 0,
+      averageScore: 0,
+      studyHours: 0,
+      completedChapters: [],
+      continueLearning: null,
+      announcements: []
+    };
+  }
+
+  var user = findUser({ userId: session['User ID'] });
+  var subscription = checkSubscription({ userId: user['User ID'] });
+  var studentProgress = getStudentProgress(payload);
+  var allProgress = getSheetData(SHEET_NAMES.PROGRESS).filter(function(record) {
+    return cleanText(record['User ID']) === cleanText(user['User ID']);
+  });
+  var videoProgress = studentProgress.progress;
+  var quizRows = allProgress.filter(function(record) {
+    return cleanText(record['Video ID']).indexOf('QUIZ_') === 0;
+  });
+  var percentages = quizRows.map(function(record) {
+    return Number(record['Completion Percentage'] || parseQuizScore(record['Quiz Score']).percentage || 0);
+  }).filter(function(value) { return value > 0; });
+  var averageScore = percentages.length
+    ? Math.round(percentages.reduce(function(sum, value) { return sum + value; }, 0) / percentages.length)
+    : 0;
+  var watchedSeconds = videoProgress.reduce(function(sum, record) {
+    return sum + Number(record.positionSeconds || 0);
+  }, 0);
+  var continueLearning = videoProgress
+    .slice()
+    .sort(function(a, b) {
+      return new Date(b.lastUpdated || 0).getTime() - new Date(a.lastUpdated || 0).getTime();
+    })[0] || null;
+
+  return {
+    success: true,
+    user: userToFrontend(user, { subscriptionStatus: subscription.subscriptionStatus }),
+    isSubscribed: subscription.isSubscribed,
+    subscriptionStatus: subscription.subscriptionStatus,
+    videosWatched: videoProgress.filter(function(record) {
+      return Number(record.watchedPercentage || record.completionPercentage || 0) >= 95;
+    }).length,
+    quizzesCompleted: quizRows.length,
+    averageScore: averageScore,
+    studyHours: Math.round((watchedSeconds / 3600) * 10) / 10,
+    completedChapters: studentProgress.completedChapters,
+    continueLearning: continueLearning,
+    announcements: getAnnouncementsForFrontend().announcements
+  };
+}
+
+function getPaymentHistory(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+  var payments = getSheetData(SHEET_NAMES.PAYMENTS)
+    .filter(function(payment) { return cleanText(payment['User ID']) === cleanText(session['User ID']); })
+    .map(paymentToFrontend);
+  return dataResponse('payments', payments);
+}
+
+function createRazorpayOrder(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+  var keyId = getScriptProperty('RAZORPAY_KEY_ID');
+  var keySecret = getScriptProperty('RAZORPAY_KEY_SECRET');
+  if (!keyId || !keySecret) {
+    throw new Error('Razorpay keys are not configured in Apps Script Properties.');
+  }
+
+  var amount = clampNumber(payload.amount, 100, 10000000, 29900);
+  var planName = cleanText(payload.planName || 'AJB Premium');
+  var receipt = generateId('ORDER');
+  var response = UrlFetchApp.fetch('https://api.razorpay.com/v1/orders', {
+    method: 'post',
+    contentType: 'application/json',
+    headers: {
+      Authorization: 'Basic ' + Utilities.base64Encode(keyId + ':' + keySecret)
+    },
+    payload: JSON.stringify({
+      amount: amount,
+      currency: 'INR',
+      receipt: receipt,
+      notes: {
+        userId: cleanText(session['User ID']),
+        planName: planName
+      }
+    }),
+    muteHttpExceptions: true
+  });
+  var statusCode = response.getResponseCode();
+  var data = parseJsonText(response.getContentText());
+  if (statusCode < 200 || statusCode >= 300) {
+    throw new Error((data.error && data.error.description) || 'Unable to create Razorpay order.');
+  }
+
+  return {
+    success: true,
+    orderId: data.id,
+    amount: data.amount,
+    currency: data.currency || 'INR',
+    receipt: data.receipt || receipt,
+    planName: planName
+  };
+}
+
+function verifyRazorpayPayment(payload) {
+  var session = requireSession(payload, false);
+  if (normalizeStatus(session['Role']) === 'ADMIN') {
+    throw new Error('Student session required.');
+  }
+  requireFields(payload, ['paymentId', 'orderId', 'signature']);
+  var keySecret = getScriptProperty('RAZORPAY_KEY_SECRET');
+  if (!keySecret) {
+    throw new Error('RAZORPAY_KEY_SECRET is not configured in Apps Script Properties.');
+  }
+
+  var expectedSignature = hmacSha256Hex(payload.orderId + '|' + payload.paymentId, keySecret);
+  if (normalizeComparable(expectedSignature) !== normalizeComparable(payload.signature)) {
+    throw new Error('Payment signature verification failed.');
+  }
+
+  var user = findUser({ userId: session['User ID'] });
+  var existing = getSheetData(SHEET_NAMES.PAYMENTS).filter(function(payment) {
+    return normalizeComparable(payment['Transaction ID']) === normalizeComparable(payload.paymentId);
+  })[0];
+
+  if (!existing) {
+    addPayment({
+      userId: user['User ID'],
+      name: user['Name'],
+      amount: Math.round(Number(payload.amount || 29900) / 100),
+      plan: cleanText(payload.planName || 'AJB Premium'),
+      paymentMethod: 'Razorpay',
+      transactionId: payload.paymentId,
+      status: 'CAPTURED'
+    });
+  } else {
+    updateSheetRow(SHEET_NAMES.USERS, user._rowNumber, {
+      'Subscription Status': 'ACTIVE'
+    });
+  }
+
+  return {
+    success: true,
+    message: 'Payment verified.',
+    subscriptionStatus: 'ACTIVE',
+    isSubscribed: true
+  };
+}
+
+function getDashboardStatsForAdmin() {
+  var users = getSheetData(SHEET_NAMES.USERS);
+  var payments = getSheetData(SHEET_NAMES.PAYMENTS).map(paymentToFrontend);
+  var successful = payments.filter(function(payment) {
+    return SUCCESSFUL_PAYMENT_STATUSES.indexOf(normalizeStatus(payment.status)) !== -1;
+  });
+  var paidUsers = {};
+  successful.forEach(function(payment) {
+    paidUsers[cleanText(payment.userId)] = true;
+  });
+  return {
+    success: true,
+    totalStudents: users.filter(function(user) { return normalizeStatus(user['Role'] || 'STUDENT') !== 'ADMIN'; }).length,
+    activeStudents: Object.keys(paidUsers).length,
+    totalPaidUsers: Object.keys(paidUsers).length,
+    totalRevenue: successful.reduce(function(sum, payment) { return sum + Number(payment.amount || 0); }, 0),
+    totalVideos: getSheetData(SHEET_NAMES.VIDEOS).filter(isActiveRecord).length
+  };
+}
+
+function getAllStudentsForAdmin() {
+  var students = getSheetData(SHEET_NAMES.USERS).map(function(user) {
+    var item = userToFrontend(user);
+    item.status = item.subscriptionStatus;
+    item.joinDate = user['Registration Date'];
+    return item;
+  });
+  return dataResponse('students', students);
+}
+
+function getAllPaymentsForAdmin(payload) {
+  var payments = getSheetData(SHEET_NAMES.PAYMENTS)
+    .map(paymentToFrontend)
+    .filter(function(payment) {
+      if (payload.status && normalizeComparable(payment.status) !== normalizeComparable(payload.status)) return false;
+      if (payload.date && cleanText(payment.date).slice(0, 10) !== cleanText(payload.date)) return false;
+      return true;
+    });
+  var successful = payments.filter(function(payment) {
+    return SUCCESSFUL_PAYMENT_STATUSES.indexOf(normalizeStatus(payment.status)) !== -1;
+  });
+  return {
+    success: true,
+    payments: payments,
+    data: payments,
+    count: payments.length,
+    totalRevenue: successful.reduce(function(sum, payment) { return sum + Number(payment.amount || 0); }, 0),
+    totalPaidUsers: Object.keys(successful.reduce(function(map, payment) {
+      map[cleanText(payment.userId)] = true;
+      return map;
+    }, {})).length
+  };
+}
+
+function getContentRecords() {
+  return getSheetData(SHEET_NAMES.VIDEOS)
+    .concat(getSheetData(SHEET_NAMES.MCQ))
+    .concat(getSheetData(SHEET_NAMES.BOOKS))
+    .concat(getSheetData(SHEET_NAMES.NOTES));
+}
+
+function collectDistinctFrontendItems(records, payload, config) {
+  var map = {};
+  records
+    .filter(isActiveRecord)
+    .filter(function(record) { return recordMatchesScope(record, payload, config.scope || []); })
+    .forEach(function(record) {
+      var id = getRecordValue(record, config.idKeys);
+      var name = getRecordValue(record, config.nameKeys) || id;
+      if (!id || !name) return;
+      var key = normalizeComparable(id);
+      if (!map[key]) {
+        map[key] = {
+          id: id,
+          name: name,
+          mediumId: getRecordValue(record, ['MEDIUM_ID', 'Medium ID', 'Medium']),
+          classId: getRecordValue(record, ['CLASS_ID', 'Class ID', 'Class']),
+          subjectId: getRecordValue(record, ['SUBJECT_ID', 'Subject ID', 'Subject']),
+          description: getRecordValue(record, config.descriptionKeys || ['DESCRIPTION', 'Description']),
+          sortOrder: normalizeNumber(getRecordValue(record, ['SORT_ORDER', 'Sort Order']), 9999)
+        };
+      }
+    });
+  return Object.keys(map).map(function(key) {
+    return map[key];
+  }).sort(sortBySortOrderThenName);
+}
+
+function recordMatchesScope(record, payload, scope) {
+  payload = payload || {};
+  var comparisons = {
+    medium: {
+      expected: payload.mediumId || payload.medium,
+      actual: getRecordValue(record, ['MEDIUM_ID', 'Medium ID', 'Medium'])
+    },
+    class: {
+      expected: payload.classId || payload.className || payload.class,
+      actual: getRecordValue(record, ['CLASS_ID', 'Class ID', 'Class'])
+    },
+    subject: {
+      expected: payload.subjectId || payload.subject,
+      actual: getRecordValue(record, ['SUBJECT_ID', 'Subject ID', 'Subject'])
+    },
+    chapter: {
+      expected: payload.chapterId || payload.chapter,
+      actual: getRecordValue(record, ['CHAPTER_ID', 'Chapter ID', 'Chapter'])
+    }
+  };
+
+  return (scope || []).every(function(name) {
+    var comparison = comparisons[name];
+    if (!comparison || !cleanText(comparison.expected)) return true;
+    if (!cleanText(comparison.actual)) return false;
+    return normalizeComparable(comparison.actual) === normalizeComparable(comparison.expected);
+  });
+}
+
+function getRecordValue(record, keys) {
+  for (var i = 0; i < (keys || []).length; i++) {
+    var key = keys[i];
+    if (record[key] !== undefined && record[key] !== null && cleanText(record[key]) !== '') {
+      return cleanText(record[key]);
+    }
+  }
+  return '';
+}
+
+function isActiveRecord(record) {
+  var status = getRecordValue(record, ['STATUS', 'Status']);
+  return !status || normalizeStatus(status) === 'ACTIVE';
+}
+
+function sortBySortOrderThenName(a, b) {
+  var orderA = normalizeNumber(a.sortOrder, 9999);
+  var orderB = normalizeNumber(b.sortOrder, 9999);
+  if (orderA !== orderB) return orderA - orderB;
+  return cleanText(a.name || a.title).localeCompare(cleanText(b.name || b.title));
+}
+
+function videoToFrontend(record) {
+  var duration = normalizeNumber(getRecordValue(record, ['DURATION_SECONDS', 'Duration Seconds', 'Duration']), 0);
+  var durationSeconds = duration && duration < 1000 ? duration * 60 : duration;
+  var chapterId = getRecordValue(record, ['CHAPTER_ID', 'Chapter ID', 'Chapter']);
+  return {
+    id: getRecordValue(record, ['VIDEO_ID', 'Video ID']) || ('VIDEO_ROW_' + record._rowNumber),
+    title: getRecordValue(record, ['TITLE', 'Video Title', 'Title']),
+    description: getRecordValue(record, ['DESCRIPTION', 'Description']),
+    mediumId: getRecordValue(record, ['MEDIUM_ID', 'Medium ID', 'Medium']),
+    classId: getRecordValue(record, ['CLASS_ID', 'Class ID', 'Class']),
+    subjectId: getRecordValue(record, ['SUBJECT_ID', 'Subject ID', 'Subject']),
+    chapterId: chapterId,
+    chapterName: getRecordValue(record, ['CHAPTER_NAME', 'Chapter Name']) || chapterId,
+    videoLink: getRecordValue(record, ['YOUTUBE_LINK', 'YouTube Link', 'YouTube/Drive URL', 'Video Link']),
+    thumbnail: getRecordValue(record, ['THUMBNAIL', 'Thumbnail']),
+    durationSeconds: durationSeconds,
+    sortOrder: normalizeNumber(getRecordValue(record, ['SORT_ORDER', 'Sort Order']), 9999)
+  };
+}
+
+function ebookToFrontend(record, source) {
+  var idPrefix = source === 'notes' ? 'NOTE' : 'BOOK';
+  var title = getRecordValue(record, ['TITLE', 'Book Name', 'Note Title', 'Title']);
+  return {
+    id: getRecordValue(record, ['BOOK_ID', 'Book ID', 'NOTE_ID', 'Note ID']) || (idPrefix + '_ROW_' + record._rowNumber),
+    title: title,
+    description: getRecordValue(record, ['DESCRIPTION', 'Description']),
+    mediumId: getRecordValue(record, ['MEDIUM_ID', 'Medium ID', 'Medium']),
+    classId: getRecordValue(record, ['CLASS_ID', 'Class ID', 'Class']),
+    subjectId: getRecordValue(record, ['SUBJECT_ID', 'Subject ID', 'Subject']),
+    chapterId: getRecordValue(record, ['CHAPTER_ID', 'Chapter ID', 'Chapter']),
+    pdfLink: getRecordValue(record, ['PDF_LINK', 'PDF Link']),
+    thumbnail: getRecordValue(record, ['THUMBNAIL', 'Thumbnail']),
+    sortOrder: normalizeNumber(getRecordValue(record, ['SORT_ORDER', 'Sort Order']), 9999)
+  };
+}
+
+function getMCQRecordsForPayload(payload) {
+  return getSheetData(SHEET_NAMES.MCQ)
+    .filter(function(record) { return recordMatchesScope(record, payload, ['medium', 'class', 'subject', 'chapter']); })
+    .filter(function(record) {
+      var quizTitle = cleanText(payload.quizTitle);
+      var recordTitle = getRecordValue(record, ['QUIZ_TITLE', 'Quiz Title']);
+      return !quizTitle || !recordTitle || normalizeComparable(recordTitle) === normalizeComparable(quizTitle);
+    })
+    .filter(isActiveRecord)
+    .sort(function(a, b) {
+      return sortBySortOrderThenName(
+        { sortOrder: getRecordValue(a, ['SORT_ORDER', 'Sort Order']), name: getRecordValue(a, ['QUESTION', 'Question']) },
+        { sortOrder: getRecordValue(b, ['SORT_ORDER', 'Sort Order']), name: getRecordValue(b, ['QUESTION', 'Question']) }
+      );
+    });
+}
+
+function mcqToFrontend(record, includeAnswer) {
+  var item = {
+    id: getRecordValue(record, ['MCQ_ID', 'MCQ ID', 'Quiz ID']) || ('MCQ_ROW_' + record._rowNumber),
+    quizTitle: getRecordValue(record, ['QUIZ_TITLE', 'Quiz Title']) || 'Chapter Quiz',
+    question: getRecordValue(record, ['QUESTION', 'Question']),
+    options: [
+      getRecordValue(record, ['OPTION_A', 'Option A']),
+      getRecordValue(record, ['OPTION_B', 'Option B']),
+      getRecordValue(record, ['OPTION_C', 'Option C']),
+      getRecordValue(record, ['OPTION_D', 'Option D'])
+    ],
+    optionA: getRecordValue(record, ['OPTION_A', 'Option A']),
+    optionB: getRecordValue(record, ['OPTION_B', 'Option B']),
+    optionC: getRecordValue(record, ['OPTION_C', 'Option C']),
+    optionD: getRecordValue(record, ['OPTION_D', 'Option D']),
+    timeSeconds: normalizeNumber(getRecordValue(record, ['TIME_SECONDS', 'Time Seconds']), 60),
+    mediumId: getRecordValue(record, ['MEDIUM_ID', 'Medium ID', 'Medium']),
+    classId: getRecordValue(record, ['CLASS_ID', 'Class ID', 'Class']),
+    subjectId: getRecordValue(record, ['SUBJECT_ID', 'Subject ID', 'Subject']),
+    chapterId: getRecordValue(record, ['CHAPTER_ID', 'Chapter ID', 'Chapter'])
+  };
+  if (includeAnswer) {
+    item.answer = normalizeAnswer(getRecordValue(record, ['CORRECT_ANSWER', 'Correct Answer']));
+    item.correctAnswer = item.answer;
+    item.explanation = getRecordValue(record, ['EXPLANATION', 'Explanation']);
+  }
+  return item;
+}
+
+function findProgressRecord(userId, videoId) {
+  var records = getSheetData(SHEET_NAMES.PROGRESS);
+  for (var i = 0; i < records.length; i++) {
+    if (
+      cleanText(records[i]['User ID']) === cleanText(userId) &&
+      cleanText(records[i]['Video ID']) === cleanText(videoId)
+    ) {
+      return records[i];
+    }
+  }
+  return null;
+}
+
+function upsertProgressRecord(userId, videoId, record) {
+  var existing = findProgressRecord(userId, videoId);
+  if (existing) {
+    updateSheetRow(SHEET_NAMES.PROGRESS, existing._rowNumber, record);
+  } else {
+    appendRow(SHEET_NAMES.PROGRESS, record);
+  }
+}
+
+function progressToFrontend(record) {
+  return {
+    userId: record['User ID'],
+    videoId: record['Video ID'],
+    chapterId: record['Chapter ID'] || record['Chapter'],
+    chapter: record['Chapter'] || record['Chapter ID'],
+    completed: normalizeYesNo(record['Completed (Yes/No)']) === 'YES',
+    quizScore: record['Quiz Score'] || '',
+    completionPercentage: Number(record['Completion Percentage'] || record['Watched Percentage'] || 0),
+    watchedPercentage: Number(record['Watched Percentage'] || record['Completion Percentage'] || 0),
+    positionSeconds: Number(record['Position Seconds'] || 0),
+    durationSeconds: Number(record['Duration Seconds'] || 0),
+    completedAt: record['Completed At'] || '',
+    lastUpdated: record['Last Updated'] || ''
+  };
+}
+
+function isCompletedChapterProgress(record) {
+  var videoId = cleanText(record['Video ID']);
+  var hasChapter = cleanText(record['Chapter ID'] || record['Chapter']);
+  return hasChapter && (
+    videoId.indexOf('CHAPTER_') === 0 ||
+    normalizeYesNo(record['Completed (Yes/No)']) === 'YES'
+  );
+}
+
+function parseQuizScore(value) {
+  var text = cleanText(value);
+  var match = text.match(/^(\d+)\s*\/\s*(\d+)$/);
+  if (!match) {
+    var percentageOnly = normalizeNumber(text, 0);
+    return { correct: 0, total: 0, percentage: percentageOnly };
+  }
+  var correct = Number(match[1]);
+  var total = Number(match[2]);
+  return {
+    correct: correct,
+    total: total,
+    percentage: total ? Math.round((correct / total) * 100) : 0
+  };
+}
+
+function indexUsersById() {
+  var map = {};
+  getSheetData(SHEET_NAMES.USERS).forEach(function(user) {
+    map[cleanText(user['User ID'])] = user;
+  });
+  return map;
+}
+
+function paymentToFrontend(payment) {
+  var usersById = indexUsersById();
+  var user = usersById[cleanText(payment['User ID'])] || {};
+  return {
+    id: payment['Payment ID'],
+    paymentId: payment['Payment ID'],
+    userId: payment['User ID'],
+    name: payment['Name'] || user['Name'] || '',
+    studentName: payment['Name'] || user['Name'] || '',
+    email: user['Email'] || '',
+    mobile: user['Phone'] || '',
+    amount: Number(payment['Amount'] || 0),
+    plan: payment['Plan'],
+    paymentMethod: payment['Payment Method'],
+    transactionId: payment['Transaction ID'],
+    razorpayPaymentId: payment['Transaction ID'],
+    razorpayOrderId: '',
+    status: payment['Status'],
+    paymentStatus: payment['Status'],
+    date: payment['Date'],
+    paymentDate: payment['Date']
+  };
+}
+
+function parseJsonText(text) {
+  try {
+    return text ? JSON.parse(text) : {};
+  } catch (error) {
+    return {};
+  }
+}
+
+function hmacSha256Hex(value, secret) {
+  var bytes = Utilities.computeHmacSha256Signature(cleanText(value), cleanText(secret));
+  return bytes.map(function(byte) {
+    var unsigned = byte < 0 ? byte + 256 : byte;
+    return ('0' + unsigned.toString(16)).slice(-2);
+  }).join('');
 }
 
 function updateLastLogin(payload) {
@@ -1295,7 +2208,10 @@ function applyStandardFilters(data, params) {
 
 function appendRow(sheetName, record) {
   var sheet = getSpreadsheet().getSheetByName(sheetName);
-  var headers = HEADERS[sheetName];
+  var lastColumn = sheet.getLastColumn();
+  var headers = lastColumn > 0
+    ? sheet.getRange(1, 1, 1, lastColumn).getValues()[0]
+    : HEADERS[sheetName];
   var row = headers.map(function(header) {
     return record[header] !== undefined ? record[header] : '';
   });

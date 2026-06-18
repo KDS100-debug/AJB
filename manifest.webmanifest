@@ -1,7 +1,7 @@
 {
   "name": "AJB LEARN",
   "short_name": "AJB LEARN",
-  "description": "Digital learning for Assam Jatiya Bidyalaya students from Nursery to Class 10.",
+  "description": "Digital learning for Assam Jatiya Bidyalaya students from Class 1 to Class 10.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

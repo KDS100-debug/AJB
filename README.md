@@ -1,6 +1,6 @@
 # AJB LEARN
 
-AJB Learn is a digital tuition platform for Assam Jatiya Bidyalaya students from Nursery to Class 10. It uses HTML, CSS, JavaScript, Google Apps Script, Google Sheets, and Razorpay.
+AJB Learn is a digital tuition platform for Assam Jatiya Bidyalaya students from Class 1 to Class 10. It uses HTML, CSS, JavaScript, Google Apps Script, Google Sheets, and Razorpay.
 
 ## Payment System
 

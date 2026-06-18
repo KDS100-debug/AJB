@@ -17,6 +17,12 @@ const CONFIG = window.CONFIG || {
 
 window.CONFIG = CONFIG;
 
+const DEFAULT_MEDIUMS = ['English', 'Assamese'].map((name) => ({ id: name, name }));
+const DEFAULT_CLASSES = Array.from({ length: 10 }, (_, index) => {
+  const name = `Class ${index + 1}`;
+  return { id: name, name };
+});
+
 class APIError extends Error {
   constructor(message, status = 500) {
     super(message);
@@ -26,8 +32,9 @@ class APIError extends Error {
 }
 
 function isConfiguredApiUrl() {
-  return Boolean(CONFIG.APPS_SCRIPT_URL) &&
-    !CONFIG.APPS_SCRIPT_URL.includes('YOUR_GOOGLE_APPS_SCRIPT');
+  const url = String(CONFIG.APPS_SCRIPT_URL || '').trim();
+  return Boolean(url) &&
+    !/YOUR_GOOGLE_APPS_SCRIPT|YOUR_DEPLOYMENT_ID|DEPLOYMENT_ID|\{.*\}/i.test(url);
 }
 
 function getSessionToken() {
@@ -36,6 +43,47 @@ function getSessionToken() {
 
 function getAdminToken() {
   return localStorage.getItem('adminToken') || getSessionToken();
+}
+
+function normalizeOptionList(items, fallbackItems = []) {
+  const source = Array.isArray(items) && items.length ? items : fallbackItems;
+  const seen = new Set();
+  return source.map((item) => {
+    const record = item && typeof item === 'object' ? item : { id: item, name: item };
+    const id = String(record.id ?? record.value ?? record.name ?? '').trim();
+    const name = String(record.name ?? record.label ?? id).trim();
+    const key = id.toLowerCase();
+    if (!id || !name || seen.has(key)) return null;
+    seen.add(key);
+    return { ...record, id, name };
+  }).filter(Boolean);
+}
+
+function canonicalClassName(value) {
+  const rawValue = value && typeof value === 'object'
+    ? (value.name ?? value.id ?? value.className ?? value.classId ?? value.class)
+    : value;
+  const text = String(rawValue ?? '').trim().replace(/\s+/g, ' ');
+  const match = text.match(/^class\s*0?([1-9]|10)$/i) ||
+    text.match(/^0?([1-9]|10)$/) ||
+    text.match(/^class0?([1-9]|10)$/i);
+  return match ? `Class ${Number(match[1])}` : '';
+}
+
+function normalizeClassList(items, mediumId = '') {
+  const classMap = new Map();
+  const addClass = (item) => {
+    const name = canonicalClassName(item);
+    if (!name) return;
+    classMap.set(name.toLowerCase(), { id: name, name, mediumId });
+  };
+
+  DEFAULT_CLASSES.forEach(addClass);
+  if (Array.isArray(items)) items.forEach(addClass);
+
+  return Array.from(classMap.values()).sort((a, b) =>
+    Number(a.name.replace(/\D/g, '')) - Number(b.name.replace(/\D/g, ''))
+  );
 }
 
 async function apiRequest(action, payload = {}, options = {}) {
@@ -48,14 +96,25 @@ async function apiRequest(action, payload = {}, options = {}) {
   if (options.admin && !body.adminToken) body.adminToken = getAdminToken();
 
   try {
-    const response = await fetch(CONFIG.APPS_SCRIPT_URL, {
+    const response = await fetch(String(CONFIG.APPS_SCRIPT_URL).trim(), {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(body),
       redirect: 'follow'
     });
-    if (!response.ok) throw new APIError(`API request failed with status ${response.status}.`, response.status);
-    const data = await response.json();
+    const responseText = await response.text();
+    let data;
+    try {
+      data = responseText ? JSON.parse(responseText) : {};
+    } catch (parseError) {
+      throw new APIError(
+        `Apps Script returned a non-JSON response (${response.status || 'unknown status'}). Redeploy the Web App as "Execute as: Me" and "Who has access: Anyone", then paste the latest /exec URL in js/api.js.`,
+        response.status || 502
+      );
+    }
+    if (!response.ok) {
+      throw new APIError(data.message || `API request failed with status ${response.status}.`, response.status);
+    }
     if (!data.success && options.throwOnError !== false) {
       throw new APIError(data.message || 'The API request failed.', 400);
     }
@@ -63,7 +122,10 @@ async function apiRequest(action, payload = {}, options = {}) {
   } catch (error) {
     if (error instanceof APIError) throw error;
     console.error(`${action} API error:`, error);
-    throw new APIError('Unable to reach the AJB LEARN backend. Check the Apps Script deployment.', 503);
+    throw new APIError(
+      'Unable to reach the AJB LEARN backend. Confirm the latest Apps Script Web App /exec URL is deployed with access set to Anyone.',
+      503
+    );
   }
 }
 
@@ -111,13 +173,19 @@ function getCurrentUserFromStorage() {
 }
 
 async function registerUser(userData) {
+  const mediumId = String(userData.mediumId || userData.medium || '').trim();
+  const classId = canonicalClassName(userData.classId || userData.className || userData.class) ||
+    String(userData.classId || userData.className || userData.class || '').trim();
   return apiRequest('registerUser', {
     name: userData.fullName || userData.name,
     mobile: userData.mobile,
     email: userData.email,
     password: userData.password,
-    mediumId: userData.mediumId || '',
-    classId: userData.classId || ''
+    medium: mediumId,
+    mediumId,
+    class: classId,
+    className: classId,
+    classId
   });
 }
 
@@ -168,11 +236,39 @@ async function updateUserProfile(profile) {
 }
 
 async function getMediums() {
-  return apiRequest('getMediums');
+  try {
+    const data = await apiRequest('getMediums');
+    return {
+      ...data,
+      mediums: normalizeOptionList(data.mediums, DEFAULT_MEDIUMS)
+    };
+  } catch (error) {
+    console.warn('Using default AJB LEARN mediums:', error);
+    return {
+      success: true,
+      fallback: true,
+      message: error.message,
+      mediums: normalizeOptionList([], DEFAULT_MEDIUMS)
+    };
+  }
 }
 
 async function getClasses(mediumId = '') {
-  return apiRequest('getClasses', { mediumId });
+  try {
+    const data = await apiRequest('getClasses', { mediumId });
+    return {
+      ...data,
+      classes: normalizeClassList(data.classes, mediumId)
+    };
+  } catch (error) {
+    console.warn('Using default AJB LEARN classes:', error);
+    return {
+      success: true,
+      fallback: true,
+      message: error.message,
+      classes: normalizeClassList([], mediumId)
+    };
+  }
 }
 
 async function getSubjects(classId = '', mediumId = '') {

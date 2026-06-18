@@ -86,8 +86,6 @@ Defines all available classes.
 CLASS1, Class 1, english
 CLASS1_ASSAMESE, Class 1, assamese
 CLASS5, Class 5, english
-NURSERY, Nursery, english
-KG, KG, english
 CLASS10, Class 10, english
 ```
 

@@ -645,7 +645,7 @@ OTPs expire after 10 minutes and allow at most five attempts.
 ```json
 {
   "action": "addClass",
-  "className": "Class 11",
+  "className": "Class 10",
   "medium": "english"
 }
 ```
@@ -655,7 +655,7 @@ OTPs expire after 10 minutes and allow at most five attempts.
 {
   "success": true,
   "message": "Class added",
-  "classId": "CLASS11"
+  "classId": "CLASS10"
 }
 ```
 
